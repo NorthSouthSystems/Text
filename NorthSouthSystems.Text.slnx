@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/_/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
     <File Path=".github/workflows/BuildTestAnalyze.yml" />
     <File Path=".github/workflows/BuildTestPackagePublish.yml" />
     <File Path=".gitignore" />

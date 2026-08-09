@@ -3,18 +3,14 @@ root = true
 #################### GLOBAL ####################
 [*]
 
+end_of_line = lf
 indent_style = space
 indent_size = 4
+insert_final_newline = true
 tab_width = 4
-insert_final_newline = false
 trim_trailing_whitespace = true
 
-# Roslyn Code Analysis
-# CA2225 : Provide a method named '...' as a friendly alternative to operator op_...
-# This is helpful for library consumers using languages which don't support operator overloads; the juice isn't worth the squeeze.
-dotnet_diagnostic.CA2225.severity = none
-
-# Microsoft .NET properties
+# Microsoft .NET properties (auto-detected then edited "as-needed"; TODO: Audit.)
 csharp_new_line_before_members_in_object_initializers = false
 csharp_preferred_modifier_order = protected, private, public, internal, file, new, static, override, volatile, virtual, async, sealed, extern, unsafe, readonly, abstract, required:suggestion
 csharp_style_prefer_utf8_string_literals = true:suggestion
@@ -68,10 +64,9 @@ dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
 
-# ReSharper properties
+# ReSharper properties (auto-detected then edited "as-needed"; TODO: Audit.)
 resharper_align_multiline_binary_expressions_chain = false
 resharper_arguments_skip_single = true
-resharper_arguments_string_literal = positional
 resharper_autodetect_indent_settings = true
 resharper_blank_lines_after_block_statements = 0
 resharper_blank_lines_after_control_transfer_statements = 1
@@ -132,7 +127,7 @@ resharper_wrap_primary_constructor_parameters_style = wrap_if_long
 resharper_xmldoc_max_line_length = 0
 resharper_xml_max_line_length = 0
 
-# ReSharper inspection severities
+# ReSharper inspection severities (auto-detected then edited "as-needed"; TODO: Audit.)
 resharper_arrange_this_qualifier_highlighting = hint
 resharper_arrange_type_member_modifiers_highlighting = hint
 resharper_arrange_type_modifiers_highlighting = hint
@@ -161,7 +156,21 @@ resharper_web_config_module_not_resolved_highlighting = warning
 resharper_web_config_type_not_resolved_highlighting = warning
 resharper_web_config_wrong_module_highlighting = warning
 
+#!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!
+# Roslyn and Rider use different glob matching engines. Roslyn does not support complicated glob patterns like Rider.
+# For instance, for the ASP.NET "Controller" glob pattern found below, Roslyn fails while Rider succeeds with:
+# [**/.Web*/**/*Controller.cs]
+# That is why we simplified it (but lost specificity):
+# [**/*Controller.cs]
+
+#################### ASP.NET ####################
+[**/*{Controller,TagHelper}.cs]
+# CA1515 : Because an application's API isn't typically referenced from outside the assembly, types can be made internal
+# "Obeying" this rule will cause some Reflection based registrations to fail (e.g. ASP.NET Controllers).
+dotnet_diagnostic.CA1515.severity = none
+
 #################### BENCHMARKS AND TESTS ####################
+# Roslyn does NOT support this glob pattern; therefore, only ReSharper overrides can be used within its scope.
 [**/*.{Benchmarks,Tests}/**/*.cs]
 
 # ReSharper inspection severities
