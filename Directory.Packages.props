@@ -14,5 +14,12 @@
         <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.91"/>
         <PackageVersion Include="xunit.v3" Version="3.2.2"/>
         <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5"/>
+
+        <!-- Transitive Pinning -->
+        <!-- This will help prevent large(r) potentially breaking version bumps, and it will also -->
+        <!-- allow us to benefit from potential performance improvements to newer package versions. -->
+        <!-- In some cases, transitive pinning is necessary due to an unexplicable error, likely related to -->
+        <!-- explicit nuget.config package mapping (which we have since relaxed with a catch-all pattern): -->
+        <!-- NU1102 "Unable to find package ... with version (>= [a valid version])" -->
     </ItemGroup>
 </Project>
