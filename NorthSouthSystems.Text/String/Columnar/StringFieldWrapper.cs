@@ -72,7 +72,7 @@ public readonly struct StringFieldWrapper : IEquatable<StringFieldWrapper>
             : convert(field.Value);
 
     private static T? Optional<T>(StringFieldWrapper field, Func<string, T> convert)
-            where T : struct =>
+        where T : struct =>
         string.IsNullOrWhiteSpace(field.Value)
             ? null
             : convert(field.Value!);

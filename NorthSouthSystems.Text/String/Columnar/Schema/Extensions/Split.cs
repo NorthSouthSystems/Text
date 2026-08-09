@@ -57,6 +57,6 @@ public static partial class StringSchemaExtensions
 
         using var charEnumerator = row.Skip(entry.Header.Length).GetEnumerator();
 
-        return new StringSchemaSplitResult(entry, StringFixedExtensions.SplitFixedRowImplementation(charEnumerator, entry.Widths, entry.FillCharacter));
+        return new(entry, StringFixedExtensions.SplitFixedRowImplementation(charEnumerator, entry.Widths, entry.FillCharacter));
     }
 }

@@ -36,7 +36,7 @@ public sealed class StringSchemaEntry
             ? columnNames
             : Enumerable.Range(0, columnWidths.Length).Select(index => index.ToString(CultureInfo.InvariantCulture)).ToArray();
 
-        RowWrapperFactory = new StringRowWrapperFactory(columnNames);
+        RowWrapperFactory = new(columnNames);
     }
 
     public string Header { get; }

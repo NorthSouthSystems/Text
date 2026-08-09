@@ -45,7 +45,7 @@ public class T_StringQuotedExtensions_SplitRow
         "1aab2aab3a".SplitQuotedRow(signals)
             .Should().Equal("1a", "2a", "3a");
 
-        signals = new StringQuotedSignals(["ababb"], null, null, null);
+        signals = new(["ababb"], null, null, null);
         "1abababb2abababb3ab".SplitQuotedRow(signals)
             .Should().Equal("1ab", "2ab", "3ab");
     }

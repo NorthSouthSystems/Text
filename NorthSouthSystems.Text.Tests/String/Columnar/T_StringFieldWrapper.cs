@@ -28,8 +28,8 @@
 
         static void TrueImpl(StringFieldWrapper wrapperLeft, StringFieldWrapper wrapperRight)
         {
-            (wrapperLeft.Equals((object)wrapperRight)).Should().BeTrue();
-            (wrapperLeft.Equals(wrapperRight)).Should().BeTrue();
+            wrapperLeft.Equals((object)wrapperRight).Should().BeTrue();
+            wrapperLeft.Equals(wrapperRight).Should().BeTrue();
             (wrapperLeft == wrapperRight).Should().BeTrue();
             (wrapperLeft != wrapperRight).Should().BeFalse();
             wrapperLeft.GetHashCode().Should().Be(wrapperRight.GetHashCode());
@@ -43,8 +43,8 @@
 
         static void FalseImpl(StringFieldWrapper wrapperLeft, StringFieldWrapper wrapperRight)
         {
-            (wrapperLeft.Equals((object)wrapperRight)).Should().BeFalse();
-            (wrapperLeft.Equals(wrapperRight)).Should().BeFalse();
+            wrapperLeft.Equals((object)wrapperRight).Should().BeFalse();
+            wrapperLeft.Equals(wrapperRight).Should().BeFalse();
             (wrapperLeft == wrapperRight).Should().BeFalse();
             (wrapperLeft != wrapperRight).Should().BeTrue();
             wrapperLeft.GetHashCode().Should().NotBe(wrapperRight.GetHashCode());
@@ -144,7 +144,7 @@
         ((DateTimeOffset?)wrapper).Value.Should().Be(nowOffset);
 
         var ts = now - now.Date;
-        ts = new TimeSpan(ts.Hours, ts.Minutes, ts.Seconds);
+        ts = new(ts.Hours, ts.Minutes, ts.Seconds);
         string tsXsd = string.Format("PT{0}H{1}M{2}S", ts.Hours, ts.Minutes, ts.Seconds);
 
         wrapper = new("A", tsXsd);
@@ -158,7 +158,7 @@
     {
         StringFieldWrapper wrapper;
 
-        Guid guid = Guid.NewGuid();
+        var guid = Guid.NewGuid();
 
         wrapper = new("A", guid.ToString());
         ((string)wrapper).Should().Be(guid.ToString());
@@ -211,40 +211,40 @@
         Action act;
         object x;
 
-        act = () => x = (bool)(new StringFieldWrapper("A", null));
+        act = () => x = (bool)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (int)(new StringFieldWrapper("A", null));
+        act = () => x = (int)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (uint)(new StringFieldWrapper("A", null));
+        act = () => x = (uint)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (long)(new StringFieldWrapper("A", null));
+        act = () => x = (long)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (ulong)(new StringFieldWrapper("A", null));
+        act = () => x = (ulong)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (float)(new StringFieldWrapper("A", null));
+        act = () => x = (float)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (double)(new StringFieldWrapper("A", null));
+        act = () => x = (double)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (decimal)(new StringFieldWrapper("A", null));
+        act = () => x = (decimal)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (DateTime)(new StringFieldWrapper("A", null));
+        act = () => x = (DateTime)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (DateTimeOffset)(new StringFieldWrapper("A", null));
+        act = () => x = (DateTimeOffset)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (TimeSpan)(new StringFieldWrapper("A", null));
+        act = () => x = (TimeSpan)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => x = (Guid)(new StringFieldWrapper("A", null));
+        act = () => x = (Guid)new StringFieldWrapper("A", null);
         act.Should().ThrowExactly<ArgumentNullException>();
     }
 }

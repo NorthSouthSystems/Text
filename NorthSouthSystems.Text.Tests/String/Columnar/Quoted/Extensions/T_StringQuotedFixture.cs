@@ -8,7 +8,7 @@
     }
 
     internal static string Replace(string format,
-            string delimiter, string newRow, string quote, string escape) =>
+        string delimiter, string newRow, string quote, string escape) =>
         format.Replace("{d}", delimiter)
             .Replace("{n}", newRow)
             .Replace("{q}", quote)
@@ -21,28 +21,28 @@
 
     internal static IReadOnlyList<StringQuotedSignals> Signals { get; } =
     [
-        new([","], ["\r\n", "\n", "\r"], null, null),                    // IsNewRowTolerantSimple (no quote, no escape)
-        new([","], ["\r\n", "\n", "\r"], null, "\\"),                    // IsNewRowTolerantSimple (no quote, escape)
-        StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180,      // IsNewRowTolerantSimple (quote, no escape)
-        new([","], ["\r\n", "\n", "\r"], "\"", "\\"),                    // IsNewRowTolerantSimple (quote, escape)
-                                                                         
-        new(["\t"], ["\n"], null, null),                                 // IsSimple (no quote, no escape)
-        new(["\t"], ["\n"], null, "\\"),                                 // IsSimple (no quote, escape)
-        new(["\t"], ["\n"], "'", null),                                  // IsSimple (quote, no escape)
-        new(["\t"], ["\n"], "'", "\\"),                                  // IsSimple (quote, escape)
-                                                                         
-        new(["DELIMITER"], ["NEWLINE"], null, null),                     // Full (no quote, no escape)
-        new(["DELIMITER"], ["NEWLINE"], null, "ESCAPE"),                 // Full (no quote, escape)
-        new(["DELIMITER"], ["NEWLINE"], "QUOTE", null),                  // Full (quote, no escape)
-        new(["DELIMITER"], ["NEWLINE"], "QUOTE", "ESCAPE"),              // Full (quote, escape)
+        new([","], ["\r\n", "\n", "\r"], null, null),               // IsNewRowTolerantSimple (no quote, no escape)
+        new([","], ["\r\n", "\n", "\r"], null, "\\"),               // IsNewRowTolerantSimple (no quote, escape)
+        StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180, // IsNewRowTolerantSimple (quote, no escape)
+        new([","], ["\r\n", "\n", "\r"], "\"", "\\"),               // IsNewRowTolerantSimple (quote, escape)
+
+        new(["\t"], ["\n"], null, null), // IsSimple (no quote, no escape)
+        new(["\t"], ["\n"], null, "\\"), // IsSimple (no quote, escape)
+        new(["\t"], ["\n"], "'", null),  // IsSimple (quote, no escape)
+        new(["\t"], ["\n"], "'", "\\"),  // IsSimple (quote, escape)
+
+        new(["DELIMITER"], ["NEWLINE"], null, null),        // Full (no quote, no escape)
+        new(["DELIMITER"], ["NEWLINE"], null, "ESCAPE"),    // Full (no quote, escape)
+        new(["DELIMITER"], ["NEWLINE"], "QUOTE", null),     // Full (quote, no escape)
+        new(["DELIMITER"], ["NEWLINE"], "QUOTE", "ESCAPE"), // Full (quote, escape)
 
         new([",", "\t", "DELIMITER"], ["\r\n", "\n", "\r"], null, null), // Full (no quote, no escape)
         new([",", "\t", "DELIMITER"], ["\r\n", "\n", "\r"], null, "\\"), // Full (no quote, escape)
         new([",", "\t", "DELIMITER"], ["\r\n", "\n", "\r"], "\"", null), // Full (quote, no escape)
         new([",", "\t", "DELIMITER"], ["\r\n", "\n", "\r"], "\"", "\\"), // Full (quote, escape)
 
-        StringQuotedSignals.CsvNewRowLinux,                              // IsSimple (quote, no escape)
-        StringQuotedSignals.CsvNewRowWindows                             // Full (quote, no escape)
+        StringQuotedSignals.CsvNewRowLinux,  // IsSimple (quote, no escape)
+        StringQuotedSignals.CsvNewRowWindows // Full (quote, no escape)
     ];
 }
 
@@ -56,8 +56,8 @@ internal class T_SplitQuotedRawParsedFieldPair
         // An escaped Windows newRow cannot be used when signals.NewRows contains \n because the \r will become
         // escaped but the \n will still trigger the new row.
         foreach (var pair in _pairs
-            .Where(p => p.IsRelevant(signals))
-            .Where(p => p._rawFormat != "{e}"))
+                     .Where(p => p.IsRelevant(signals))
+                     .Where(p => p._rawFormat != "{e}"))
         {
             string delimiter = T_StringQuotedFixture.Random(signals.Delimiters);
             string newRow = T_StringQuotedFixture.Random(signals.NewRows);
@@ -157,7 +157,7 @@ internal class T_SplitQuotedRawParsedFieldPair
         new("{q}{e}{q}{e}{q}{q}", "{q}{q}"),
         new("{q}{e}{q}{e}{q}a{q}", "{q}{q}a"),
         new("{q}{e}{q}a{e}{q}{q}", "{q}a{q}"),
-        new("{q}{e}{q}a{d}{e}{q}{n}{q}", "{q}a{d}{q}{n}"),
+        new("{q}{e}{q}a{d}{e}{q}{n}{q}", "{q}a{d}{q}{n}")
     ];
 
     private T_SplitQuotedRawParsedFieldPair(string rawFormat, string parsedFormat)

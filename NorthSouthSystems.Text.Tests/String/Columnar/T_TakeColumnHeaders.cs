@@ -54,7 +54,7 @@
     }
 
     private static List<StringRowWrapper> Result(string csv,
-            IEnumerable<string> expectedColumnNames, bool enforceExpectedColumnNamesOrder) =>
+        IEnumerable<string> expectedColumnNames, bool enforceExpectedColumnNamesOrder) =>
         csv.SplitQuotedRows(StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
             .TakeColumnHeaders(expectedColumnNames, enforceExpectedColumnNamesOrder)
             .ToList();

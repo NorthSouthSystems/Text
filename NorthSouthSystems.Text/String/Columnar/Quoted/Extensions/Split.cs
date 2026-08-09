@@ -112,9 +112,12 @@ public static partial class StringQuotedExtensions
     private static ISplitQuotedProcessor CreateSplitQuotedProcessor(StringQuotedSignals signals) =>
         signals.IsNewRowTolerantSimple
             ? new NewRowTolerantSimpleSplitQuotedProcessor(signals)
-            : (signals.IsSimple
+            : signals.IsSimple
                 ? new SimpleSplitQuotedProcessor(signals)
-                : new FullSplitQuotedProcessor(signals));
+                : new FullSplitQuotedProcessor(signals);
 
-    private interface ISplitQuotedProcessor { IEnumerable<string[]> Process(IEnumerable<char> rows); }
+    private interface ISplitQuotedProcessor
+    {
+        IEnumerable<string[]> Process(IEnumerable<char> rows);
+    }
 }

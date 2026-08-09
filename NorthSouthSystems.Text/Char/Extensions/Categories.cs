@@ -24,16 +24,16 @@ public static partial class CharExtensions
 {
     public static bool IsInAnyCategory(this char value, CharCategories categories) =>
         (categories.HasFlag(CharCategories.Control) && char.IsControl(value))
-            || (categories.HasFlag(CharCategories.Digit) && char.IsDigit(value))
-            || (categories.HasFlag(CharCategories.HighSurrogate) && char.IsHighSurrogate(value))
-            || (categories.HasFlag(CharCategories.Letter) && char.IsLetter(value))
-            || (categories.HasFlag(CharCategories.Lower) && char.IsLower(value))
-            || (categories.HasFlag(CharCategories.LowSurrogate) && char.IsLowSurrogate(value))
-            || (categories.HasFlag(CharCategories.Number) && char.IsNumber(value))
-            || (categories.HasFlag(CharCategories.Punctuation) && char.IsPunctuation(value))
-            || (categories.HasFlag(CharCategories.Separator) && char.IsSeparator(value))
-            || (categories.HasFlag(CharCategories.Surrogate) && char.IsSurrogate(value))
-            || (categories.HasFlag(CharCategories.Symbol) && char.IsSymbol(value))
-            || (categories.HasFlag(CharCategories.Upper) && char.IsUpper(value))
-            || (categories.HasFlag(CharCategories.WhiteSpace) && char.IsWhiteSpace(value));
+        || (categories.HasFlag(CharCategories.Digit) && char.IsDigit(value))
+        || (categories.HasFlag(CharCategories.HighSurrogate) && char.IsHighSurrogate(value))
+        || (categories.HasFlag(CharCategories.Letter) && char.IsLetter(value))
+        || (categories.HasFlag(CharCategories.Lower) && char.IsLower(value))
+        || (categories.HasFlag(CharCategories.LowSurrogate) && char.IsLowSurrogate(value))
+        || (categories.HasFlag(CharCategories.Number) && char.IsNumber(value))
+        || (categories.HasFlag(CharCategories.Punctuation) && char.IsPunctuation(value))
+        || (categories.HasFlag(CharCategories.Separator) && char.IsSeparator(value))
+        || (categories.HasFlag(CharCategories.Surrogate) && char.IsSurrogate(value))
+        || (categories.HasFlag(CharCategories.Symbol) && char.IsSymbol(value))
+        || (categories.HasFlag(CharCategories.Upper) && char.IsUpper(value))
+        || (categories.HasFlag(CharCategories.WhiteSpace) && char.IsWhiteSpace(value));
 }

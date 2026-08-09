@@ -61,6 +61,7 @@ public static partial class StringQuotedExtensions
                 if (ProcessReturnsYieldRow(c))
                 {
                     yield return _fields.ToArray();
+
                     Reset();
                 }
             }
@@ -141,7 +142,7 @@ public static partial class StringQuotedExtensions
                 RewindField(1);
                 FlushField();
 
-                _newRowTolerantWasCarriageReturn = (c == '\r');
+                _newRowTolerantWasCarriageReturn = c == '\r';
 
                 return true;
             }

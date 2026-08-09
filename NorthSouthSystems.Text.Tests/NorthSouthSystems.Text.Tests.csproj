@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="morelinq" />
+        <PackageReference Include="morelinq"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\NorthSouthSystems.Text\NorthSouthSystems.Text.csproj" />
+        <ProjectReference Include="..\NorthSouthSystems.Text\NorthSouthSystems.Text.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="NorthSouthSystems" />
-        <Using Include="NorthSouthSystems.Text" />
+        <Using Include="NorthSouthSystems"/>
+        <Using Include="NorthSouthSystems.Text"/>
     </ItemGroup>
 
 </Project>

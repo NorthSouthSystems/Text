@@ -82,6 +82,7 @@ public static partial class StringQuotedExtensions
                 if (ProcessReturnsYieldRow(c))
                 {
                     yield return _fields.ToArray();
+
                     Reset();
                 }
             }

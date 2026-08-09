@@ -12,14 +12,14 @@ public class B_JoinQuotedRow
     [Benchmark]
     public void LinuxNewLines()
     {
-        foreach (var fields in _rowsFields)
+        foreach (string[] fields in _rowsFields)
             fields.JoinQuotedRow(StringQuotedSignals.CsvNewRowLinux);
     }
 
     [Benchmark]
     public void WindowsNewLines()
     {
-        foreach (var fields in _rowsFields)
+        foreach (string[] fields in _rowsFields)
             fields.JoinQuotedRow(StringQuotedSignals.CsvNewRowWindows);
     }
 }

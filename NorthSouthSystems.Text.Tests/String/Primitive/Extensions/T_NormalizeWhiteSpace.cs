@@ -16,12 +16,12 @@
     [InlineData("  A  ", "A")]
     [InlineData(" Changes ", "Changes")]
     [InlineData("Lots  Of   Changes", "Lots Of Changes")]
-    [InlineData(("a{Environment.NewLine}b"), "a{Environment.NewLine}b")]
-    [InlineData(("a {Environment.NewLine}b"), "a{Environment.NewLine}b")]
-    [InlineData(("a{Environment.NewLine} b"), "a{Environment.NewLine}b")]
-    [InlineData(("a {Environment.NewLine} b"), "a{Environment.NewLine}b")]
-    [InlineData(("Lots\tOf{Environment.NewLine}Changes"), "Lots Of{Environment.NewLine}Changes")]
-    [InlineData((" Lots \t Of {Environment.NewLine} Changes "), "Lots Of{Environment.NewLine}Changes")]
+    [InlineData("a{Environment.NewLine}b", "a{Environment.NewLine}b")]
+    [InlineData("a {Environment.NewLine}b", "a{Environment.NewLine}b")]
+    [InlineData("a{Environment.NewLine} b", "a{Environment.NewLine}b")]
+    [InlineData("a {Environment.NewLine} b", "a{Environment.NewLine}b")]
+    [InlineData("Lots\tOf{Environment.NewLine}Changes", "Lots Of{Environment.NewLine}Changes")]
+    [InlineData(" Lots \t Of {Environment.NewLine} Changes ", "Lots Of{Environment.NewLine}Changes")]
     public void ChangesNewLineRespect(string value, string shouldBe)
     {
         value = value.Replace("{Environment.NewLine}", Environment.NewLine);
@@ -48,8 +48,8 @@
     [InlineData("a\r\n b", "a b")]
     [InlineData("a \r\nb", "a b")]
     [InlineData("a \r\n b", "a b")]
-    [InlineData(("Lots\tOf{Environment.NewLine}Changes"), "Lots Of Changes")]
-    [InlineData((" Lots \t Of {Environment.NewLine} Changes "), "Lots Of Changes")]
+    [InlineData("Lots\tOf{Environment.NewLine}Changes", "Lots Of Changes")]
+    [InlineData(" Lots \t Of {Environment.NewLine} Changes ", "Lots Of Changes")]
     public void ChangesNewLineNoRespect(string value, string shouldBe)
     {
         value = value.Replace("{Environment.NewLine}", Environment.NewLine);

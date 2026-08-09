@@ -34,8 +34,8 @@
 
         static void TrueImpl(StringRowWrapper wrapperLeft, StringRowWrapper wrapperRight)
         {
-            (wrapperLeft.Equals((object)wrapperRight)).Should().BeTrue();
-            (wrapperLeft.Equals(wrapperRight)).Should().BeTrue();
+            wrapperLeft.Equals((object)wrapperRight).Should().BeTrue();
+            wrapperLeft.Equals(wrapperRight).Should().BeTrue();
             (wrapperLeft == wrapperRight).Should().BeTrue();
             (wrapperLeft != wrapperRight).Should().BeFalse();
             wrapperLeft.GetHashCode().Should().Be(wrapperRight.GetHashCode());
@@ -49,8 +49,8 @@
 
         static void FalseImpl(StringRowWrapper wrapperLeft, StringRowWrapper wrapperRight)
         {
-            (wrapperLeft.Equals((object)wrapperRight)).Should().BeFalse();
-            (wrapperLeft.Equals(wrapperRight)).Should().BeFalse();
+            wrapperLeft.Equals((object)wrapperRight).Should().BeFalse();
+            wrapperLeft.Equals(wrapperRight).Should().BeFalse();
             (wrapperLeft == wrapperRight).Should().BeFalse();
             (wrapperLeft != wrapperRight).Should().BeTrue();
             wrapperLeft.GetHashCode().Should().NotBe(wrapperRight.GetHashCode());

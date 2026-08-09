@@ -94,7 +94,7 @@ internal static class StringSignalTracker
         internal ManyCharTracker(string signal)
         {
             _signal = signal;
-            _activeCounters = new List<int>(_signal.Length);
+            _activeCounters = new(_signal.Length);
         }
 
         private readonly string _signal;

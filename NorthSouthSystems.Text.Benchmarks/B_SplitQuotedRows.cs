@@ -8,12 +8,27 @@ using System.IO;
 public class B_SplitQuotedRows
 {
     [GlobalSetup]
-    public void GlobalSetup() { bool _ = B_RealEstateSalesCsvs.IsInitialized; }
+    public void GlobalSetup()
+    {
+        bool _ = B_RealEstateSalesCsvs.IsInitialized;
+    }
 
     private readonly Consumer _consumer = new();
 
-    public enum NewRowType { Linux, Windows };
-    public enum MappingType { Skip, Array, Raw, AutoRaw, AutoTyped };
+    public enum NewRowType
+    {
+        Linux,
+        Windows
+    }
+
+    public enum MappingType
+    {
+        Skip,
+        Array,
+        Raw,
+        AutoRaw,
+        AutoTyped
+    }
 
     [Params(MappingType.Array, MappingType.Raw, Priority = 1)]
     public MappingType Mapping { get; set; }

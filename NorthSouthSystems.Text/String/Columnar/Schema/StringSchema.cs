@@ -31,5 +31,5 @@ public sealed class StringSchema
 
     internal StringSchemaEntry GetEntryForRow(string row) =>
         _entries.Values.FirstOrDefault(entry => row.StartsWith(entry.Header, StringComparison.Ordinal))
-            ?? throw new ArgumentOutOfRangeException(nameof(row), row, "No matching schema definition.");
+        ?? throw new ArgumentOutOfRangeException(nameof(row), row, "No matching schema definition.");
 }

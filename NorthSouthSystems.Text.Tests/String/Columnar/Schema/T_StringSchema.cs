@@ -4,10 +4,10 @@
     public void Basic()
     {
         var schema = new StringSchema();
-        schema.AddEntry(new StringSchemaEntry("A", new[] { 3 }));
-        schema.AddEntry(new StringSchemaEntry("B", new[] { 6 }));
-        schema.AddEntry(new StringSchemaEntry("C", new[] { 3, 3 }));
-        schema.AddEntry(new StringSchemaEntry("DE", new[] { 4, 4 }));
+        schema.AddEntry(new("A", new[] { 3 }));
+        schema.AddEntry(new("B", new[] { 6 }));
+        schema.AddEntry(new("C", new[] { 3, 3 }));
+        schema.AddEntry(new("DE", new[] { 4, 4 }));
 
         StringSchemaEntry entry;
 
@@ -75,7 +75,7 @@
             var schema = new StringSchema();
             var entry = new StringSchemaEntry("A", new[] { 1 });
             schema.AddEntry(entry);
-            entry = new StringSchemaEntry("AB", new[] { 1 });
+            entry = new("AB", new[] { 1 });
             schema.AddEntry(entry);
         };
         act.Should().ThrowExactly<ArgumentOutOfRangeException>("VerifyEntryOverlappedHeader");
@@ -85,7 +85,7 @@
             var schema = new StringSchema();
             var entry = new StringSchemaEntry("AB", new[] { 1 });
             schema.AddEntry(entry);
-            entry = new StringSchemaEntry("A", new[] { 1 });
+            entry = new("A", new[] { 1 });
             schema.AddEntry(entry);
         };
         act.Should().ThrowExactly<ArgumentOutOfRangeException>("VerifyEntryOverlappedHeader");

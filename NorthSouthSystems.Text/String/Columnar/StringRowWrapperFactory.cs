@@ -45,7 +45,7 @@ public sealed class StringRowWrapperFactory
         if (fields.Length > ColumnNames.Length)
             throw new ArgumentException(FormattableString.Invariant($"The number of fields must be <= the number of columns. wrapCounter = {wrapCounter}"));
 
-        return new StringRowWrapper(this, fields);
+        return new(this, fields);
     }
 
     internal bool TryGetIndex(string columnName, out int index) => _columnNameIndices.TryGetValue(columnName, out index);

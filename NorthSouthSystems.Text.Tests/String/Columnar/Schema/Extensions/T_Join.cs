@@ -37,7 +37,7 @@
     {
         Action act;
 
-        act = () => ((string[])null).JoinSchemaRow(new StringSchemaEntry("A", new[] { 1, 1, 1 }));
+        act = () => ((string[])null).JoinSchemaRow(new("A", new[] { 1, 1, 1 }));
         act.Should().ThrowExactly<ArgumentNullException>();
 
         act = () => new[] { "1" }.JoinSchemaRow(null);
