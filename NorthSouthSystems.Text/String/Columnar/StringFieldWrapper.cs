@@ -80,13 +80,15 @@ public readonly struct StringFieldWrapper : IEquatable<StringFieldWrapper>
     public static explicit operator string?(StringFieldWrapper field) =>
         field.Value;
 
+    // TODO : CA2225 fix?
+#pragma warning disable CA2225 // Provide a method named 'To...' or 'From...' as an alternate for operator op_Explicit (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2225)
 #pragma warning disable CA1308 // XmlConvert.ToBoolean requires lowercase.
     public static explicit operator bool(StringFieldWrapper field) =>
         Required(field, static value => XmlConvert.ToBoolean(value.ToLower(CultureInfo.InvariantCulture)));
 
     public static explicit operator bool?(StringFieldWrapper field) =>
         Optional(field, static value => XmlConvert.ToBoolean(value.ToLower(CultureInfo.InvariantCulture)));
-#pragma warning restore
+#pragma warning restore CA1308
 
     public static explicit operator int(StringFieldWrapper field) =>
         Required(field, XmlConvert.ToInt32);
@@ -153,6 +155,7 @@ public readonly struct StringFieldWrapper : IEquatable<StringFieldWrapper>
 
     public static explicit operator Guid?(StringFieldWrapper field) =>
         Optional(field, XmlConvert.ToGuid);
+#pragma warning restore
 
     #endregion
 }
