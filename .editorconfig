@@ -10,151 +10,57 @@ insert_final_newline = true
 tab_width = 4
 trim_trailing_whitespace = true
 
-# Microsoft .NET properties (auto-detected then edited "as-needed"; TODO: Audit.)
+# Roslyn Code Analysis
+# IDE0130 : Namespace does not match folder structure
+dotnet_diagnostic.ide0130.severity = none
+
+# Microsoft .NET properties
 csharp_new_line_before_members_in_object_initializers = false
-csharp_preferred_modifier_order = protected, private, public, internal, file, new, static, override, volatile, virtual, async, sealed, extern, unsafe, readonly, abstract, required:suggestion
-csharp_style_prefer_utf8_string_literals = true:suggestion
-csharp_style_var_elsewhere = true:suggestion
-csharp_style_var_for_built_in_types = false:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-dotnet_naming_rule.interfaces_rule.import_to_resharper = True
-dotnet_naming_rule.interfaces_rule.resharper_description = Interfaces
-dotnet_naming_rule.interfaces_rule.resharper_guid = a7a3339e-4e89-4319-9735-a9dc4cb74cc7
-dotnet_naming_rule.interfaces_rule.severity = warning
-dotnet_naming_rule.interfaces_rule.style = i_upper_camel_case_style
-dotnet_naming_rule.interfaces_rule.symbols = interfaces_symbols
-dotnet_naming_rule.type_parameters_rule.import_to_resharper = True
-dotnet_naming_rule.type_parameters_rule.resharper_description = Type parameters
-dotnet_naming_rule.type_parameters_rule.resharper_guid = 2c62818f-621b-4425-adc9-78611099bfcb
-dotnet_naming_rule.type_parameters_rule.severity = warning
-dotnet_naming_rule.type_parameters_rule.style = upper_camel_case_style
-dotnet_naming_rule.type_parameters_rule.symbols = type_parameters_symbols
-dotnet_naming_rule.unity_serialized_field_rule.import_to_resharper = True
-dotnet_naming_rule.unity_serialized_field_rule.resharper_description = Unity serialized field
-dotnet_naming_rule.unity_serialized_field_rule.resharper_guid = 5f0fdb63-c892-4d2c-9324-15c80b22a7ef
-dotnet_naming_rule.unity_serialized_field_rule.severity = warning
-dotnet_naming_rule.unity_serialized_field_rule.style = lower_camel_case_style
-dotnet_naming_rule.unity_serialized_field_rule.symbols = unity_serialized_field_symbols
-dotnet_naming_style.i_upper_camel_case_style.capitalization = pascal_case
-dotnet_naming_style.i_upper_camel_case_style.required_prefix = I
-dotnet_naming_style.lower_camel_case_style.capitalization = camel_case
-dotnet_naming_style.upper_camel_case_style.capitalization = pascal_case
-dotnet_naming_symbols.interfaces_symbols.applicable_accessibilities = *
-dotnet_naming_symbols.interfaces_symbols.applicable_kinds = interface
-dotnet_naming_symbols.interfaces_symbols.resharper_applicable_kinds = interface
-dotnet_naming_symbols.interfaces_symbols.resharper_required_modifiers = any
-dotnet_naming_symbols.type_parameters_symbols.applicable_accessibilities = *
-dotnet_naming_symbols.type_parameters_symbols.applicable_kinds = type_parameter
-dotnet_naming_symbols.type_parameters_symbols.resharper_applicable_kinds = type_parameter
-dotnet_naming_symbols.type_parameters_symbols.resharper_required_modifiers = any
-dotnet_naming_symbols.unity_serialized_field_symbols.applicable_accessibilities = *
-dotnet_naming_symbols.unity_serialized_field_symbols.applicable_kinds =
-dotnet_naming_symbols.unity_serialized_field_symbols.resharper_applicable_kinds = unity_serialised_field
-dotnet_naming_symbols.unity_serialized_field_symbols.resharper_required_modifiers = instance
+csharp_style_var_elsewhere = true:warning
+csharp_style_var_for_built_in_types = false
+csharp_style_var_when_type_is_apparent = true:warning
 dotnet_sort_system_directives_first = false
-dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:none
-dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:none
-dotnet_style_parentheses_in_other_operators = always_for_clarity:none
-dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:none
-dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
-dotnet_style_predefined_type_for_member_access = true:suggestion
-dotnet_style_qualification_for_event = false:suggestion
-dotnet_style_qualification_for_field = false:suggestion
-dotnet_style_qualification_for_method = false:suggestion
-dotnet_style_qualification_for_property = false:suggestion
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
+dotnet_style_parentheses_in_other_operators = always_for_clarity
 
-# ReSharper properties (auto-detected then edited "as-needed"; TODO: Audit.)
-resharper_align_multiline_binary_expressions_chain = false
-resharper_arguments_skip_single = true
-resharper_autodetect_indent_settings = true
-resharper_blank_lines_after_block_statements = 0
-resharper_blank_lines_after_control_transfer_statements = 1
-resharper_blank_lines_after_start_comment = 0
-resharper_blank_lines_around_single_line_type = 0
-resharper_braces_for_ifelse = not_required
-resharper_braces_for_using = not_required
-resharper_braces_redundant = false
-resharper_constructor_or_destructor_body = expression_body
-resharper_cpp_max_line_length = 0
-resharper_csharp_blank_lines_around_invocable = 0
-resharper_csharp_empty_block_style = together
-resharper_csharp_int_align_comments = true
-resharper_csharp_max_line_length = 0
-resharper_csharp_remove_blank_lines_near_braces_in_code = false
-resharper_csharp_wrap_before_binary_opsign = true
-resharper_csharp_wrap_lines = false
-resharper_formatter_off_tag = @formatter:off
-resharper_formatter_on_tag = @formatter:on
-resharper_formatter_tags_enabled = true
-resharper_fsharp_max_line_length = 0
-resharper_html_max_line_length = 0
-resharper_indent_inside_namespace = false
-resharper_indent_nested_foreach_stmt = true
-resharper_indent_nested_for_stmt = true
-resharper_instance_members_qualify_declared_in =
-resharper_keep_existing_attribute_arrangement = true
-resharper_keep_existing_declaration_block_arrangement = true
-resharper_keep_existing_embedded_block_arrangement = true
-resharper_local_function_body = expression_body
-resharper_max_attribute_length_for_same_line = 70
-resharper_method_or_operator_body = expression_body
-resharper_object_creation_when_type_not_evident = target_typed
-resharper_parentheses_redundancy_style = remove_if_not_clarifies_precedence
-resharper_place_accessorholder_attribute_on_same_line = true
-resharper_place_expr_accessor_on_single_line = true
-resharper_place_expr_method_on_single_line = false
-resharper_place_expr_property_on_single_line = true
-resharper_place_method_attribute_on_same_line = if_owner_is_single_line
-resharper_place_record_field_attribute_on_same_line = true
-resharper_place_simple_accessorholder_on_single_line = true
-resharper_place_simple_embedded_statement_on_same_line = false
-resharper_place_simple_initializer_on_single_line = false
-resharper_place_simple_list_pattern_on_single_line = false
-resharper_place_single_method_argument_lambda_on_same_line = false
-resharper_resx_max_line_length = 0
-resharper_shaderlab_max_line_length = 0
-resharper_T4_max_line_length = 0
-resharper_use_indent_from_vs = false
-resharper_vb_max_line_length = 0
-resharper_wrap_after_primary_constructor_declaration_lpar = false
-resharper_wrap_array_initializer_style = chop_if_long
-resharper_wrap_chained_binary_expressions = chop_if_long
-resharper_wrap_chained_binary_patterns = chop_if_long
-resharper_wrap_list_pattern = chop_if_long
-resharper_wrap_object_and_collection_initializer_style = chop_always
-resharper_wrap_primary_constructor_parameters_style = wrap_if_long
-resharper_xmldoc_max_line_length = 0
-resharper_xml_max_line_length = 0
+# ReSharper properties
+prefer_roslyn_rules_for_parentheses_clarity = false # i.e. dotnet_style_parentheses_*
+resharper_align_multiline_binary_expressions_chain = false # Don't try to align multiline && || && || chains.
+resharper_arguments_skip_single = true # Skip named/positional argument-style rules when only one argument.
+resharper_arrange_redundant_parentheses_highlighting = none # default: hint; parens help readability.
+resharper_braces_for_for = required_for_multiline # default: not_required
+resharper_braces_for_foreach = required_for_multiline # default: not_required
+resharper_braces_for_ifelse = required_for_multiline # default: not_required_for_both
+resharper_braces_for_lock = required_for_multiline # default: required
+resharper_braces_for_using = required_for_multiline # default: required
+resharper_braces_for_while = required_for_multiline # default: not_required
+resharper_constructor_or_destructor_body = expression_body # default: block_body
+resharper_csharp_blank_lines_before_block_statements = 1 # default: 0
+resharper_csharp_empty_block_style = together # default: multiline
+resharper_csharp_keep_nontrivial_alias = true # Helps readability.
+resharper_csharp_place_attribute_on_same_line = false # Keep it simple: every attribute is on its own line except record fields.
+resharper_csharp_place_record_field_attribute_on_same_line = true # The exception to every attribute on its own line.
+resharper_csharp_qualified_using_at_nested_scope = true # Helps readability.
+resharper_csharp_wrap_after_declaration_lpar = true # default: ?; helps readability when combined with chop_if_long.
+resharper_csharp_wrap_after_invocation_lpar = true # default: ?; helps readability when combined with chop_if_long.
+resharper_csharp_wrap_before_binary_opsign = true # default: ?; helps continuation line self-document: ?? && ||
+resharper_csharp_wrap_before_extends_colon = true # default: ?; helps readability of Type declarations.
+resharper_csharp_wrap_before_first_type_parameter_constraint = true # default: ?; helps readability of Type declarations.
+resharper_csharp_wrap_before_type_parameter_langle = true # default: ?; helps readability of Type declarations.
+resharper_csharp_wrap_chained_binary_expressions = chop_if_long # default: wrap_if_long
+resharper_csharp_wrap_multiple_type_parameter_constraints_style = chop_always # default: ?; helps readability of Type declarations.
+resharper_instance_members_qualify_declared_in = # Don't qualify with 'this.'.
+resharper_local_function_body = expression_body # default: block_body
+resharper_method_or_operator_body = expression_body # default: block_body
+resharper_object_creation_when_type_not_evident = target_typed # Allow return new();
+resharper_place_simple_method_on_single_line = true # Simple single line.
+resharper_prefer_wrap_around_eq = strongly # Break after the = sign when a wrap is needed.
+resharper_wrap_arguments_style = chop_if_long # default: wrap_if_long
+resharper_wrap_parameters_style = chop_if_long # default: wrap_if_long
 
-# ReSharper inspection severities (auto-detected then edited "as-needed"; TODO: Audit.)
-resharper_arrange_this_qualifier_highlighting = hint
-resharper_arrange_type_member_modifiers_highlighting = hint
-resharper_arrange_type_modifiers_highlighting = hint
-resharper_built_in_type_reference_style_for_member_access_highlighting = hint
-resharper_built_in_type_reference_style_highlighting = hint
-resharper_check_namespace_highlighting = none
-resharper_convert_to_extension_block_highlighting = hint
-resharper_mvc_action_not_resolved_highlighting = warning
-resharper_mvc_area_not_resolved_highlighting = warning
-resharper_mvc_controller_not_resolved_highlighting = warning
-resharper_mvc_masterpage_not_resolved_highlighting = warning
-resharper_mvc_partial_view_not_resolved_highlighting = warning
-resharper_mvc_template_not_resolved_highlighting = warning
-resharper_mvc_view_component_not_resolved_highlighting = warning
-resharper_mvc_view_component_view_not_resolved_highlighting = warning
-resharper_mvc_view_not_resolved_highlighting = warning
-resharper_razor_assembly_not_resolved_highlighting = warning
-resharper_redundant_base_qualifier_highlighting = warning
-resharper_redundant_name_qualifier_highlighting = hint
-resharper_suggest_var_or_type_built_in_types_highlighting = hint
-resharper_suggest_var_or_type_elsewhere_highlighting = hint
-resharper_suggest_var_or_type_simple_types_highlighting = hint
+# ReSharper inspection severities
+resharper_check_namespace_highlighting = none # Keep things simple by allowing a single namespace and using folders for organization.
 resharper_unused_auto_property_accessor_global_highlighting = suggestion # False positive for Options classes
 resharper_unused_method_return_value_local_highlighting = suggestion # Noisy for standard .NET DI Container and Configuration patterns.
-resharper_web_config_module_not_resolved_highlighting = warning
-resharper_web_config_type_not_resolved_highlighting = warning
-resharper_web_config_wrong_module_highlighting = warning
 
 #!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!
 # Roslyn and Rider use different glob matching engines. Roslyn does not support complicated glob patterns like Rider.
@@ -167,7 +73,7 @@ resharper_web_config_wrong_module_highlighting = warning
 [**/*{Controller,TagHelper}.cs]
 # CA1515 : Because an application's API isn't typically referenced from outside the assembly, types can be made internal
 # "Obeying" this rule will cause some Reflection based registrations to fail (e.g. ASP.NET Controllers).
-dotnet_diagnostic.CA1515.severity = none
+dotnet_diagnostic.ca1515.severity = none
 
 #################### BENCHMARKS AND TESTS ####################
 # Roslyn does NOT support this glob pattern; therefore, only ReSharper overrides can be used within its scope.
