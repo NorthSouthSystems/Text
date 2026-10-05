@@ -13,6 +13,12 @@ restore:
 restore-force:
     dotnet restore --force-evaluate
 
+format-solution solution: tools
+    dotnet jb cleanupcode "{{solution}}" \
+        --profile="Built-in: Reformat & Apply Syntax Style" \
+        --no-updates \
+        --verbosity=ERROR
+
 build: restore
     dotnet build --no-restore
 
