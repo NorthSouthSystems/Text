@@ -67,9 +67,11 @@ public readonly struct StringRowWrapper : IEquatable<StringRowWrapper>
                 throw new ArgumentOutOfRangeException(nameof(index), "index must be >= 0.");
 
             if (index >= _factory.ColumnNames.Length)
+            {
                 throw new ArgumentOutOfRangeException(
                     nameof(index),
                     "index must be < the number of columns in the StringRowWrapperFactory.");
+            }
 
             return CreateField(index);
         }
@@ -80,9 +82,11 @@ public readonly struct StringRowWrapper : IEquatable<StringRowWrapper>
         get
         {
             if (!_factory.TryGetIndex(columnName, out int index))
+            {
                 throw new ArgumentException(
                     string.Format(CultureInfo.InvariantCulture, "Column not found: {0}.", columnName),
                     nameof(columnName));
+            }
 
             return CreateField(index);
         }

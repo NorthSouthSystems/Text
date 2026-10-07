@@ -17,12 +17,14 @@ public class T_StringQuotedExtensions_Join
             if (signals.NewRowIsSpecified)
             {
                 foreach (string newRow in signals.NewRows)
+                {
                     JoinAndAssert(
                         ["a" + newRow + "a", "b", "c"],
                         signals,
                         false,
                         "{q}a{no}a{q}{d}b{d}c",
                         expectedNewRowOverride: newRow);
+                }
             }
 
             JoinAndAssert(
@@ -47,12 +49,14 @@ public class T_StringQuotedExtensions_Join
                 if (signals.NewRowIsSpecified)
                 {
                     foreach (string newRow in signals.NewRows)
+                    {
                         JoinAndAssert(
                             ["a" + newRow, "b", "c"],
                             signals,
                             false,
                             "a{e}{no}{d}b{d}c",
                             expectedNewRowOverride: newRow);
+                    }
                 }
 
                 JoinAndAssert(["a" + signals.Escape, "b", "c"], signals, false, "a{e}{e}{d}b{d}c");

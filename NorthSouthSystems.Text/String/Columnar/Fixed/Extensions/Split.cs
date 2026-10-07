@@ -187,9 +187,11 @@ public static partial class StringFixedExtensions
                 else if (i == 0 && charsToTake == columnWidths[0]) // Empty enumerator
                     return Array.Empty<string>();
                 else
+                {
                     throw new ArgumentOutOfRangeException(
                         nameof(charEnumerator),
                         "row length must equal the sum of all column widths.");
+                }
             }
 
             int charsToKeep = columnWidths[i];

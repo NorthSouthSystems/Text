@@ -22,10 +22,12 @@ public sealed class StringSchema
         ArgumentNullException.ThrowIfNull(entry);
 
         if (_entries.Values.Any(existingEntry => existingEntry.HeaderOverlaps(entry)))
+        {
             throw new ArgumentOutOfRangeException(
                 nameof(entry),
                 entry.Header,
                 "No entry.Header may StartWith any other existing entry.Header.");
+        }
 
         _entries.Add(entry.Header, entry);
     }

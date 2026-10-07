@@ -32,6 +32,7 @@ public static partial class StringFixedExtensions
             if (leftToFit)
                 fields[i] = fields[i].Left(columnWidths[i]);
             else if (fields[i].Length > columnWidths[i])
+            {
                 errors.Add(
                     string.Format(
                         CultureInfo.InvariantCulture,
@@ -39,9 +40,11 @@ public static partial class StringFixedExtensions
                         i,
                         columnWidths[i],
                         fields[i].Length));
+            }
         }
 
         if (errors.Count > 0)
+        {
             throw new ArgumentOutOfRangeException(
                 nameof(fields),
                 string.Format(
@@ -49,5 +52,6 @@ public static partial class StringFixedExtensions
                     "Each field's length must be <= to its corresponding column's width (use leftToFit = true if truncation is allowed).{0}{1}",
                     Environment.NewLine,
                     string.Join(Environment.NewLine, errors)));
+        }
     }
 }

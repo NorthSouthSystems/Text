@@ -132,10 +132,12 @@ internal sealed class StringQuotedSignalsEscaping
             string replaceOld = signal;
 
             foreach (var replacement in replacements)
+            {
                 replaceOld = replaceOld.Replace(
                     replacement.ReplaceOld,
                     replacement.ReplaceNew,
                     StringComparison.CurrentCulture);
+            }
 
             replacements.Add((replaceOld, escape + signal));
         }

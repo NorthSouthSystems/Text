@@ -79,8 +79,10 @@ public sealed class StringQuotedSignalsBuilder
         if (StringExtensions.AnyPermutationPair(
                 multi,
                 (x, y) => x.Length > y.Length && x[..^1].Contains(y, StringComparison.CurrentCulture)))
+        {
             throw new ArgumentException(
                 $"{callerMemberName} may only EndsWith another {callerMemberName}. All other StartsWith or Contains are invalid.");
+        }
 
         return Helper(getter, setter, multi);
     }
