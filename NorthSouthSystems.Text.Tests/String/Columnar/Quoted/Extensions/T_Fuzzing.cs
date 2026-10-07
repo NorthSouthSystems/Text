@@ -107,7 +107,10 @@ public class T_StringQuotedExtensions_FuzzingSingleFieldMultiRows
             }
         });
 
-    private static void ActAndAssert(StringQuotedSignals signals, string rows, IEnumerable<string[]> expectedRowsOfFields) =>
+    private static void ActAndAssert(
+        StringQuotedSignals signals,
+        string rows,
+        IEnumerable<string[]> expectedRowsOfFields) =>
         T_StringQuotedExtensions_FuzzingMultiFieldMultiRows.ActAndAssert(signals, rows, expectedRowsOfFields);
 }
 
@@ -162,18 +165,24 @@ public class T_StringQuotedExtensions_FuzzingMultiFieldMultiRows
             }
         });
 
-    internal static void ActAndAssert(StringQuotedSignals signals, string rows, IEnumerable<string[]> expectedRowsOfFields)
+    internal static void ActAndAssert(
+        StringQuotedSignals signals,
+        string rows,
+        IEnumerable<string[]> expectedRowsOfFields)
     {
         rows.SplitQuotedRows(signals)
             .EquiZip(expectedRowsOfFields, (fields, expectedFields) => fields.Should().Equal(expectedFields))
             .Consume();
 
-        bool skipLastRow = expectedRowsOfFields.Last().Length == 1 && string.IsNullOrEmpty(expectedRowsOfFields.Last()[0]);
+        bool skipLastRow =
+            expectedRowsOfFields.Last().Length == 1 && string.IsNullOrEmpty(expectedRowsOfFields.Last()[0]);
 
         rows.SplitQuotedRows(signals)
             .JoinQuotedRows(signals)
             .SplitQuotedRows(signals)
-            .EquiZip(expectedRowsOfFields.SkipLast(skipLastRow ? 1 : 0), (fields, expectedFields) => fields.Should().Equal(expectedFields))
+            .EquiZip(
+                expectedRowsOfFields.SkipLast(skipLastRow ? 1 : 0),
+                (fields, expectedFields) => fields.Should().Equal(expectedFields))
             .Consume();
     }
 }

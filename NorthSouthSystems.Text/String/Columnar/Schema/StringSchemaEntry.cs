@@ -32,9 +32,11 @@ public sealed class StringSchemaEntry
         Widths = columnWidths;
         FillCharacter = fillCharacter;
 
-        columnNames = (columnNames != null && columnNames.Length > 0)
+        columnNames = columnNames != null && columnNames.Length > 0
             ? columnNames
-            : Enumerable.Range(0, columnWidths.Length).Select(index => index.ToString(CultureInfo.InvariantCulture)).ToArray();
+            : Enumerable.Range(0, columnWidths.Length)
+                .Select(index => index.ToString(CultureInfo.InvariantCulture))
+                .ToArray();
 
         RowWrapperFactory = new(columnNames);
     }
@@ -45,5 +47,6 @@ public sealed class StringSchemaEntry
     internal StringRowWrapperFactory RowWrapperFactory { get; }
 
     internal bool HeaderOverlaps(StringSchemaEntry entry) =>
-        Header.StartsWith(entry.Header, StringComparison.Ordinal) || entry.Header.StartsWith(Header, StringComparison.Ordinal);
+        Header.StartsWith(entry.Header, StringComparison.Ordinal)
+        || entry.Header.StartsWith(Header, StringComparison.Ordinal);
 }

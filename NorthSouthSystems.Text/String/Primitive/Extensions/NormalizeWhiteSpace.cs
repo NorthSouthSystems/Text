@@ -3,13 +3,16 @@
 public static partial class StringExtensions
 {
     /// <inheritdoc cref="NormalizeWhiteSpace(IEnumerable{char}, string)"/>
-    public static string NormalizeWhiteSpace(this string value) => NormalizeWhiteSpace((IEnumerable<char>)value, Environment.NewLine).ToNewString();
+    public static string NormalizeWhiteSpace(this string value) =>
+        NormalizeWhiteSpace((IEnumerable<char>)value, Environment.NewLine).ToNewString();
 
     /// <inheritdoc cref="NormalizeWhiteSpace(IEnumerable{char}, string)"/>
-    public static string NormalizeWhiteSpace(this string value, string respectNewLine) => NormalizeWhiteSpace((IEnumerable<char>)value, respectNewLine).ToNewString();
+    public static string NormalizeWhiteSpace(this string value, string respectNewLine) =>
+        NormalizeWhiteSpace((IEnumerable<char>)value, respectNewLine).ToNewString();
 
     /// <inheritdoc cref="NormalizeWhiteSpace(IEnumerable{char}, string)"/>
-    public static IEnumerable<char> NormalizeWhiteSpace(this IEnumerable<char> chars) => NormalizeWhiteSpace(chars, Environment.NewLine);
+    public static IEnumerable<char> NormalizeWhiteSpace(this IEnumerable<char> chars) =>
+        NormalizeWhiteSpace(chars, Environment.NewLine);
 
     /// <summary>
     /// Trims the front and back sides of a sequence of chars while replacing any repeating instances of whitespace with a

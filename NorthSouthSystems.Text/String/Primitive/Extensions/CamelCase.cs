@@ -103,7 +103,8 @@ public static partial class StringExtensions
     }
 
     /// <inheritdoc cref="DelimitCamelCase(IEnumerable{char}, string)"/>
-    public static string DelimitCamelCase(this string value, string delimiter) => DelimitCamelCase((IEnumerable<char>)value, delimiter).ToNewString();
+    public static string DelimitCamelCase(this string value, string delimiter) =>
+        DelimitCamelCase((IEnumerable<char>)value, delimiter).ToNewString();
 
     /// <summary>
     /// Process a sequence of characters and returns the same sequence of characters but with delimiter inserted

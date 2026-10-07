@@ -178,8 +178,10 @@ internal static class StringSignalTracker
             int length = 0;
 
             foreach (var tracker in _trackers)
+            {
                 if ((length = tracker.ProcessCharReturnsTriggeredLength(value)) > 0)
                     return length;
+            }
 
             return length;
         }

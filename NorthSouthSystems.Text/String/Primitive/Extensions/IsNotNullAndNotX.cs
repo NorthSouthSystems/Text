@@ -36,7 +36,8 @@ public static class StringIsNotNullAndNotXExtensions
         /// Instead, it is a simple static method that is the inverse of string.IsNullOrWhiteSpace.
         /// </summary>
         /// <remarks><see cref="IsNotNullAndNotEmpty(string)"/></remarks>
-        public static bool IsNotNullAndNotWhiteSpace([NotNullWhen(true)] string? value) => !string.IsNullOrWhiteSpace(value);
+        public static bool IsNotNullAndNotWhiteSpace([NotNullWhen(true)] string? value) =>
+            !string.IsNullOrWhiteSpace(value);
     }
 #pragma warning restore
 }

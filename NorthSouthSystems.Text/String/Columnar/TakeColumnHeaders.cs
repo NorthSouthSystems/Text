@@ -17,16 +17,20 @@ public static class TakeColumnHeadersExtensions
     /// specified by expectedColumnNames. (default = false)</param>
     /// <returns>The rows of fields converted to StringRowWrappers excluding the first row representing
     /// column headers.</returns>
-    public static IEnumerable<StringRowWrapper> TakeColumnHeaders(this IEnumerable<string[]> rowsOfFields,
-        IEnumerable<string>? expectedColumnNames = null, bool enforceExpectedColumnNamesOrder = false)
+    public static IEnumerable<StringRowWrapper> TakeColumnHeaders(
+        this IEnumerable<string[]> rowsOfFields,
+        IEnumerable<string>? expectedColumnNames = null,
+        bool enforceExpectedColumnNamesOrder = false)
     {
         ArgumentNullException.ThrowIfNull(rowsOfFields);
 
         return TakeColumnHeadersIterator(rowsOfFields, expectedColumnNames, enforceExpectedColumnNamesOrder);
     }
 
-    private static IEnumerable<StringRowWrapper> TakeColumnHeadersIterator(IEnumerable<string[]> rowsOfFields,
-        IEnumerable<string>? expectedColumnNames, bool enforceExpectedColumnNamesOrder)
+    private static IEnumerable<StringRowWrapper> TakeColumnHeadersIterator(
+        IEnumerable<string[]> rowsOfFields,
+        IEnumerable<string>? expectedColumnNames,
+        bool enforceExpectedColumnNamesOrder)
     {
         StringRowWrapperFactory? rowWrapperFactory = null;
 
@@ -44,8 +48,10 @@ public static class TakeColumnHeadersExtensions
         }
     }
 
-    private static void ThrowIfIncorrectColumnNames(string[] rowFields,
-        IEnumerable<string> expectedColumnNames, bool enforceExpectedColumnNamesOrder)
+    private static void ThrowIfIncorrectColumnNames(
+        string[] rowFields,
+        IEnumerable<string> expectedColumnNames,
+        bool enforceExpectedColumnNamesOrder)
     {
         var errors = new List<string>();
 

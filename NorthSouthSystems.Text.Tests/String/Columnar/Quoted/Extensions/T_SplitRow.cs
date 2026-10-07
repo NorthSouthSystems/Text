@@ -61,17 +61,23 @@ public class T_StringQuotedExtensions_SplitRow
         act = () => string.Empty.SplitQuotedRow(null);
         act.Should().ThrowExactly<ArgumentNullException>();
 
-        act = () => T_StringQuotedFixture.Replace("a,b,c{n}d", StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
+        act = () => T_StringQuotedFixture.Replace(
+                "a,b,c{n}d",
+                StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
             .First()
             .SplitQuotedRow(StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180);
         act.Should().ThrowExactly<ArgumentException>("NewLineInArgument");
 
-        act = () => T_StringQuotedFixture.Replace("a,b,c{n}d,e,f", StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
+        act = () => T_StringQuotedFixture.Replace(
+                "a,b,c{n}d,e,f",
+                StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
             .First()
             .SplitQuotedRow(StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180);
         act.Should().ThrowExactly<ArgumentException>("NewLineInArgument");
 
-        act = () => T_StringQuotedFixture.Replace("a,b,c{n}d,e,f{n}g,h,i", StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
+        act = () => T_StringQuotedFixture.Replace(
+                "a,b,c{n}d,e,f{n}g,h,i",
+                StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
             .First()
             .SplitQuotedRow(StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180);
         act.Should().ThrowExactly<ArgumentException>("NewLineInArgument");

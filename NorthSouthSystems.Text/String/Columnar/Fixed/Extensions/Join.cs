@@ -56,7 +56,11 @@ public static partial class StringFixedExtensions
     /// Console Output:<br/>
     /// AB12<br/>
     /// </example>
-    public static string JoinFixedRow(this string[] fields, int[] columnWidths, char fillCharacter = ' ', bool leftToFit = false)
+    public static string JoinFixedRow(
+        this string[] fields,
+        int[] columnWidths,
+        char fillCharacter = ' ',
+        bool leftToFit = false)
     {
         VerifyColumnWidths(columnWidths);
 
@@ -67,7 +71,11 @@ public static partial class StringFixedExtensions
     /// This method exists solely as a performance optimization for StringSchemaExtensions.JoinSchemaRow. SchemaEntry ctor calls VerifyColumnWidths;
     /// therefore, JoinSchemaRow can call this method and bypass redundant calls to VerifyColumnWidths.
     /// </summary>
-    internal static string JoinFixedRowNoVerifyColumnWidths(string[] fields, int[] columnWidths, char fillCharacter, bool leftToFit)
+    internal static string JoinFixedRowNoVerifyColumnWidths(
+        string[] fields,
+        int[] columnWidths,
+        char fillCharacter,
+        bool leftToFit)
     {
         VerifyCoalesceAndFitFields(fields, columnWidths, leftToFit);
 

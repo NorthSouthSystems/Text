@@ -3,12 +3,16 @@
     internal static IEnumerable<string> Replace(string format, StringQuotedSignals signals)
     {
         foreach (string delimiter in signals.Delimiters)
-            foreach (string newRow in signals.NewRows.DefaultIfEmpty(string.Empty))
-                yield return Replace(format, signals.Delimiter, signals.NewRow, signals.Quote, signals.Escape);
+        foreach (string newRow in signals.NewRows.DefaultIfEmpty(string.Empty))
+            yield return Replace(format, signals.Delimiter, signals.NewRow, signals.Quote, signals.Escape);
     }
 
-    internal static string Replace(string format,
-        string delimiter, string newRow, string quote, string escape) =>
+    internal static string Replace(
+        string format,
+        string delimiter,
+        string newRow,
+        string quote,
+        string escape) =>
         format.Replace("{d}", delimiter)
             .Replace("{n}", newRow)
             .Replace("{q}", quote)
@@ -21,19 +25,19 @@
 
     internal static IReadOnlyList<StringQuotedSignals> Signals { get; } =
     [
-        new([","], ["\r\n", "\n", "\r"], null, null),               // IsNewRowTolerantSimple (no quote, no escape)
-        new([","], ["\r\n", "\n", "\r"], null, "\\"),               // IsNewRowTolerantSimple (no quote, escape)
+        new([","], ["\r\n", "\n", "\r"], null, null), // IsNewRowTolerantSimple (no quote, no escape)
+        new([","], ["\r\n", "\n", "\r"], null, "\\"), // IsNewRowTolerantSimple (no quote, escape)
         StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180, // IsNewRowTolerantSimple (quote, no escape)
-        new([","], ["\r\n", "\n", "\r"], "\"", "\\"),               // IsNewRowTolerantSimple (quote, escape)
+        new([","], ["\r\n", "\n", "\r"], "\"", "\\"), // IsNewRowTolerantSimple (quote, escape)
 
         new(["\t"], ["\n"], null, null), // IsSimple (no quote, no escape)
         new(["\t"], ["\n"], null, "\\"), // IsSimple (no quote, escape)
-        new(["\t"], ["\n"], "'", null),  // IsSimple (quote, no escape)
-        new(["\t"], ["\n"], "'", "\\"),  // IsSimple (quote, escape)
+        new(["\t"], ["\n"], "'", null), // IsSimple (quote, no escape)
+        new(["\t"], ["\n"], "'", "\\"), // IsSimple (quote, escape)
 
-        new(["DELIMITER"], ["NEWLINE"], null, null),        // Full (no quote, no escape)
-        new(["DELIMITER"], ["NEWLINE"], null, "ESCAPE"),    // Full (no quote, escape)
-        new(["DELIMITER"], ["NEWLINE"], "QUOTE", null),     // Full (quote, no escape)
+        new(["DELIMITER"], ["NEWLINE"], null, null), // Full (no quote, no escape)
+        new(["DELIMITER"], ["NEWLINE"], null, "ESCAPE"), // Full (no quote, escape)
+        new(["DELIMITER"], ["NEWLINE"], "QUOTE", null), // Full (quote, no escape)
         new(["DELIMITER"], ["NEWLINE"], "QUOTE", "ESCAPE"), // Full (quote, escape)
 
         new([",", "\t", "DELIMITER"], ["\r\n", "\n", "\r"], null, null), // Full (no quote, no escape)
@@ -41,7 +45,7 @@
         new([",", "\t", "DELIMITER"], ["\r\n", "\n", "\r"], "\"", null), // Full (quote, no escape)
         new([",", "\t", "DELIMITER"], ["\r\n", "\n", "\r"], "\"", "\\"), // Full (quote, escape)
 
-        StringQuotedSignals.CsvNewRowLinux,  // IsSimple (quote, no escape)
+        StringQuotedSignals.CsvNewRowLinux, // IsSimple (quote, no escape)
         StringQuotedSignals.CsvNewRowWindows // Full (quote, no escape)
     ];
 }

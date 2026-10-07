@@ -87,14 +87,18 @@ public static partial class StringExtensions
     /// foobar<br/>
     /// geebar<br/>
     /// </example>
-    public static string ReplacePrefix(this string value, string prefix, string replacement, StringComparison comparison = default)
+    public static string ReplacePrefix(
+        this string value,
+        string prefix,
+        string replacement,
+        StringComparison comparison = default)
     {
         ArgumentNullException.ThrowIfNull(value);
         ArgumentException.ThrowIfNullOrEmpty(prefix);
 
         return value.StartsWith(prefix, comparison)
             ? value.Length > prefix.Length
-                ? (replacement + value[prefix.Length..])
+                ? replacement + value[prefix.Length..]
                 : replacement.NullToEmpty()
             : value;
     }
@@ -120,14 +124,18 @@ public static partial class StringExtensions
     /// foobar<br/>
     /// foogee<br/>
     /// </example>
-    public static string ReplaceSuffix(this string value, string suffix, string replacement, StringComparison comparison = default)
+    public static string ReplaceSuffix(
+        this string value,
+        string suffix,
+        string replacement,
+        StringComparison comparison = default)
     {
         ArgumentNullException.ThrowIfNull(value);
         ArgumentException.ThrowIfNullOrEmpty(suffix);
 
         return value.EndsWith(suffix, comparison)
             ? value.Length > suffix.Length
-                ? (value[..^suffix.Length] + replacement)
+                ? value[..^suffix.Length] + replacement
                 : replacement.NullToEmpty()
             : value;
     }

@@ -53,8 +53,10 @@
         act.Should().ThrowExactly<ArgumentException>().WithMessage("*expected order*");
     }
 
-    private static List<StringRowWrapper> Result(string csv,
-        IEnumerable<string> expectedColumnNames, bool enforceExpectedColumnNamesOrder) =>
+    private static List<StringRowWrapper> Result(
+        string csv,
+        IEnumerable<string> expectedColumnNames,
+        bool enforceExpectedColumnNamesOrder) =>
         csv.SplitQuotedRows(StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180)
             .TakeColumnHeaders(expectedColumnNames, enforceExpectedColumnNamesOrder)
             .ToList();

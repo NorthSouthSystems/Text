@@ -15,10 +15,20 @@ public class T_StringQuotedExtensions_Join
                 JoinAndAssert(["a" + delimiter, "b", "c"], signals, false, "{q}a{do}{q}{d}b{d}c", delimiter);
 
             if (signals.NewRowIsSpecified)
+            {
                 foreach (string newRow in signals.NewRows)
-                    JoinAndAssert(["a" + newRow + "a", "b", "c"], signals, false, "{q}a{no}a{q}{d}b{d}c", expectedNewRowOverride: newRow);
+                    JoinAndAssert(
+                        ["a" + newRow + "a", "b", "c"],
+                        signals,
+                        false,
+                        "{q}a{no}a{q}{d}b{d}c",
+                        expectedNewRowOverride: newRow);
+            }
 
-            JoinAndAssert(["a" + signals.Quote, "b", "c"], signals, false,
+            JoinAndAssert(
+                ["a" + signals.Quote, "b", "c"],
+                signals,
+                false,
                 signals.EscapeIsSpecified
                     ? "{q}a{e}{q}{q}{d}b{d}c"
                     : "{q}a{q}{q}{q}{d}b{d}c");
@@ -28,20 +38,33 @@ public class T_StringQuotedExtensions_Join
 
     [Fact]
     public void Escaping() =>
-        T_StringQuotedFixture.Signals.Where(signals => signals.EscapeIsSpecified && !signals.QuoteIsSpecified).ForEach(signals =>
-        {
-            foreach (string delimiter in signals.Delimiters)
-                JoinAndAssert(["a" + delimiter, "b", "c"], signals, false, "a{e}{do}{d}b{d}c", delimiter);
+        T_StringQuotedFixture.Signals.Where(signals => signals.EscapeIsSpecified && !signals.QuoteIsSpecified)
+            .ForEach(signals =>
+            {
+                foreach (string delimiter in signals.Delimiters)
+                    JoinAndAssert(["a" + delimiter, "b", "c"], signals, false, "a{e}{do}{d}b{d}c", delimiter);
 
-            if (signals.NewRowIsSpecified)
-                foreach (string newRow in signals.NewRows)
-                    JoinAndAssert(["a" + newRow, "b", "c"], signals, false, "a{e}{no}{d}b{d}c", expectedNewRowOverride: newRow);
+                if (signals.NewRowIsSpecified)
+                {
+                    foreach (string newRow in signals.NewRows)
+                        JoinAndAssert(
+                            ["a" + newRow, "b", "c"],
+                            signals,
+                            false,
+                            "a{e}{no}{d}b{d}c",
+                            expectedNewRowOverride: newRow);
+                }
 
-            JoinAndAssert(["a" + signals.Escape, "b", "c"], signals, false, "a{e}{e}{d}b{d}c");
-        });
+                JoinAndAssert(["a" + signals.Escape, "b", "c"], signals, false, "a{e}{e}{d}b{d}c");
+            });
 
-    private static void JoinAndAssert(string[] actualFields, StringQuotedSignals signals, bool forceQuotes,
-        string expectedFormat, string expectedDelimiterOverride = null, string expectedNewRowOverride = null)
+    private static void JoinAndAssert(
+        string[] actualFields,
+        StringQuotedSignals signals,
+        bool forceQuotes,
+        string expectedFormat,
+        string expectedDelimiterOverride = null,
+        string expectedNewRowOverride = null)
     {
         actualFields.JoinQuotedRow(signals, forceQuotes)
             .Should().Be(Expected(expectedFormat));
@@ -55,7 +78,8 @@ public class T_StringQuotedExtensions_Join
                 .Should().Be(Expected(expectedFormat + signals.NewRow + expectedFormat));
 
             new[] { actualFields, actualFields, actualFields }.JoinQuotedRows(signals, forceQuotes)
-                .Should().Be(Expected(expectedFormat + signals.NewRow + expectedFormat + signals.NewRow + expectedFormat));
+                .Should().Be(
+                    Expected(expectedFormat + signals.NewRow + expectedFormat + signals.NewRow + expectedFormat));
         }
 
         string Expected(string format) =>

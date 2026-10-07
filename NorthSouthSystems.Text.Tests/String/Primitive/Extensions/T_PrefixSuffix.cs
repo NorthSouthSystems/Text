@@ -27,7 +27,12 @@
     [InlineData("foobar", "foo", null, (StringComparison)default, "bar")]
     [InlineData("foo", "foo", "", (StringComparison)default, "")]
     [InlineData("foo", "foo", null, (StringComparison)default, "")]
-    public void ReplacePrefix(string value, string prefix, string replacement, StringComparison comparison, string shouldBe) =>
+    public void ReplacePrefix(
+        string value,
+        string prefix,
+        string replacement,
+        StringComparison comparison,
+        string shouldBe) =>
         value.ReplacePrefix(prefix, replacement, comparison).Should().Be(shouldBe);
 
     [Theory]
@@ -39,7 +44,12 @@
     [InlineData("foobar", "bar", null, (StringComparison)default, "foo")]
     [InlineData("bar", "bar", "", (StringComparison)default, "")]
     [InlineData("bar", "bar", null, (StringComparison)default, "")]
-    public void ReplaceSuffix(string value, string suffix, string replacement, StringComparison comparison, string shouldBe) =>
+    public void ReplaceSuffix(
+        string value,
+        string suffix,
+        string replacement,
+        StringComparison comparison,
+        string shouldBe) =>
         value.ReplaceSuffix(suffix, replacement, comparison).Should().Be(shouldBe);
 
     [Fact]

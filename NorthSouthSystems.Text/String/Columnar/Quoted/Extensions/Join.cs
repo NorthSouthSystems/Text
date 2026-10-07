@@ -6,7 +6,10 @@
 /// </summary>
 public static partial class StringQuotedExtensions
 {
-    public static string JoinQuotedRows(this IEnumerable<IEnumerable<string>> rowsOfFields, StringQuotedSignals signals, bool forceQuotes = false)
+    public static string JoinQuotedRows(
+        this IEnumerable<IEnumerable<string>> rowsOfFields,
+        StringQuotedSignals signals,
+        bool forceQuotes = false)
     {
         ArgumentNullException.ThrowIfNull(rowsOfFields);
         ArgumentNullException.ThrowIfNull(signals);
@@ -17,7 +20,9 @@ public static partial class StringQuotedExtensions
         if (forceQuotes && !signals.QuoteIsSpecified)
             throw new ArgumentException("Quote'ing forced; therefore, signals.Quote must not be null or empty.");
 
-        return string.Join(signals.NewRow, rowsOfFields.Select(fields => JoinQuotedRowImpl(fields, signals, forceQuotes)));
+        return string.Join(
+            signals.NewRow,
+            rowsOfFields.Select(fields => JoinQuotedRowImpl(fields, signals, forceQuotes)));
     }
 
     /// <summary>
@@ -61,7 +66,10 @@ public static partial class StringQuotedExtensions
     /// Console Output:<br/>
     /// a""a,b,c<br/>
     /// </example>
-    public static string JoinQuotedRow(this IEnumerable<string> fields, StringQuotedSignals signals, bool forceQuotes = false)
+    public static string JoinQuotedRow(
+        this IEnumerable<string> fields,
+        StringQuotedSignals signals,
+        bool forceQuotes = false)
     {
         ArgumentNullException.ThrowIfNull(signals);
 
@@ -75,7 +83,9 @@ public static partial class StringQuotedExtensions
     {
         ArgumentNullException.ThrowIfNull(fields);
 
-        return string.Join(signals.Delimiter, fields.Select(field => QuoteAndEscapeField(field ?? string.Empty, signals, forceQuotes)));
+        return string.Join(
+            signals.Delimiter,
+            fields.Select(field => QuoteAndEscapeField(field ?? string.Empty, signals, forceQuotes)));
     }
 
     private static string QuoteAndEscapeField(string field, StringQuotedSignals signals, bool forceQuotes)
@@ -89,20 +99,33 @@ public static partial class StringQuotedExtensions
         if (signals.QuoteIsSpecified)
         {
             if (forceQuotes || found.RequiresQuotingOrEscaping)
-                field = signals.Quote + field.Replace(signals.Quote, escaping.EscapedQuote, StringComparison.CurrentCulture) + signals.Quote;
+                field = signals.Quote
+                    + field.Replace(signals.Quote, escaping.EscapedQuote, StringComparison.CurrentCulture)
+                    + signals.Quote;
         }
         else if (signals.EscapeIsSpecified)
         {
             if (found.DelimiterFound)
+            {
                 foreach (var escapedDelimiter in escaping.EscapedDelimiters)
-                    field = field.Replace(escapedDelimiter.ReplaceOld, escapedDelimiter.ReplaceNew, StringComparison.CurrentCulture);
+                    field = field.Replace(
+                        escapedDelimiter.ReplaceOld,
+                        escapedDelimiter.ReplaceNew,
+                        StringComparison.CurrentCulture);
+            }
 
             if (found.NewRowFound)
+            {
                 foreach (var escapedNewRow in escaping.EscapedNewRows)
-                    field = field.Replace(escapedNewRow.ReplaceOld, escapedNewRow.ReplaceNew, StringComparison.CurrentCulture);
+                    field = field.Replace(
+                        escapedNewRow.ReplaceOld,
+                        escapedNewRow.ReplaceNew,
+                        StringComparison.CurrentCulture);
+            }
         }
         else if (found.RequiresQuotingOrEscaping)
-            throw new ArgumentException("Quoting or Escaping is required; therefore, either signals.Quote or signals.Escape must not be null or empty.");
+            throw new ArgumentException(
+                "Quoting or Escaping is required; therefore, either signals.Quote or signals.Escape must not be null or empty.");
 
         return field;
     }

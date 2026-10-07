@@ -64,8 +64,12 @@ public sealed class StringQuotedSignalsBuilder
 
     private string? _escape;
 
-    private StringQuotedSignalsBuilder MultiHelper(Func<string[]?> getter, Action<string[]?> setter,
-        string primary, string[] alternates, [CallerMemberName] string? callerMemberName = null)
+    private StringQuotedSignalsBuilder MultiHelper(
+        Func<string[]?> getter,
+        Action<string[]?> setter,
+        string primary,
+        string[] alternates,
+        [CallerMemberName] string? callerMemberName = null)
     {
         string[] multi = alternates.Prepend(primary).Where(string.IsNotNullAndNotEmpty).Distinct().ToArray();
 
@@ -75,9 +79,8 @@ public sealed class StringQuotedSignalsBuilder
         if (StringExtensions.AnyPermutationPair(
                 multi,
                 (x, y) => x.Length > y.Length && x[..^1].Contains(y, StringComparison.CurrentCulture)))
-        {
-            throw new ArgumentException($"{callerMemberName} may only EndsWith another {callerMemberName}. All other StartsWith or Contains are invalid.");
-        }
+            throw new ArgumentException(
+                $"{callerMemberName} may only EndsWith another {callerMemberName}. All other StartsWith or Contains are invalid.");
 
         return Helper(getter, setter, multi);
     }
@@ -100,9 +103,11 @@ public sealed class StringQuotedSignalsBuilder
     private bool AnySignalContainsAnyOther()
     {
         foreach (string? delimiter in (_delimiters ?? []).DefaultIfEmpty())
-            foreach (string? newRow in (_newRows ?? []).DefaultIfEmpty())
-                if (AnyPermutationPairContains(delimiter, newRow, _quote, _escape))
-                    return true;
+        foreach (string? newRow in (_newRows ?? []).DefaultIfEmpty())
+        {
+            if (AnyPermutationPairContains(delimiter, newRow, _quote, _escape))
+                return true;
+        }
 
         return false;
 

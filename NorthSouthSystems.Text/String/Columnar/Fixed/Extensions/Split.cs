@@ -135,7 +135,10 @@ public static partial class StringFixedExtensions
     /// E<br/>
     /// F<br/>
     /// </example>
-    public static IEnumerable<string[]> SplitFixedRepeating(this IEnumerable<char> rows, int[] columnWidths, char fillCharacter = ' ')
+    public static IEnumerable<string[]> SplitFixedRepeating(
+        this IEnumerable<char> rows,
+        int[] columnWidths,
+        char fillCharacter = ' ')
     {
         ArgumentNullException.ThrowIfNull(rows);
 
@@ -144,7 +147,10 @@ public static partial class StringFixedExtensions
         return SplitFixedRepeatingIterator(rows, columnWidths, fillCharacter);
     }
 
-    private static IEnumerable<string[]> SplitFixedRepeatingIterator(IEnumerable<char> rows, int[] columnWidths, char fillCharacter)
+    private static IEnumerable<string[]> SplitFixedRepeatingIterator(
+        IEnumerable<char> rows,
+        int[] columnWidths,
+        char fillCharacter)
     {
         using var charEnumerator = rows.GetEnumerator();
 
@@ -159,7 +165,10 @@ public static partial class StringFixedExtensions
         } while (fields.Length > 0);
     }
 
-    internal static string[] SplitFixedRowImplementation(IEnumerator<char> charEnumerator, int[] columnWidths, char fillCharacter)
+    internal static string[] SplitFixedRowImplementation(
+        IEnumerator<char> charEnumerator,
+        int[] columnWidths,
+        char fillCharacter)
     {
         string[] fields = new string[columnWidths.Length];
 
@@ -178,7 +187,9 @@ public static partial class StringFixedExtensions
                 else if (i == 0 && charsToTake == columnWidths[0]) // Empty enumerator
                     return Array.Empty<string>();
                 else
-                    throw new ArgumentOutOfRangeException(nameof(charEnumerator), "row length must equal the sum of all column widths.");
+                    throw new ArgumentOutOfRangeException(
+                        nameof(charEnumerator),
+                        "row length must equal the sum of all column widths.");
             }
 
             int charsToKeep = columnWidths[i];

@@ -44,8 +44,12 @@ public class B_SplitQuotedRows
 
     private string GetCsv() => NewRow switch
     {
-        NewRowType.Linux => ForcedQuotes ? B_RealEstateSalesCsvs.LinuxNewLinesForcedQuotes : B_RealEstateSalesCsvs.LinuxNewLines,
-        NewRowType.Windows => ForcedQuotes ? B_RealEstateSalesCsvs.WindowsNewLinesForcedQuotes : B_RealEstateSalesCsvs.WindowsNewLines,
+        NewRowType.Linux => ForcedQuotes
+            ? B_RealEstateSalesCsvs.LinuxNewLinesForcedQuotes
+            : B_RealEstateSalesCsvs.LinuxNewLines,
+        NewRowType.Windows => ForcedQuotes
+            ? B_RealEstateSalesCsvs.WindowsNewLinesForcedQuotes
+            : B_RealEstateSalesCsvs.WindowsNewLines,
 
         _ => throw new NotImplementedException(NewRow.ToString())
     };
@@ -57,8 +61,12 @@ public class B_SplitQuotedRows
 
         var signals = NewRow switch
         {
-            NewRowType.Linux => IsNewRowTolerant ? StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180 : StringQuotedSignals.CsvNewRowLinux,
-            NewRowType.Windows => IsNewRowTolerant ? StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180 : StringQuotedSignals.CsvNewRowWindows,
+            NewRowType.Linux => IsNewRowTolerant
+                ? StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180
+                : StringQuotedSignals.CsvNewRowLinux,
+            NewRowType.Windows => IsNewRowTolerant
+                ? StringQuotedSignals.CsvNewRowTolerantWindowsPrimaryRFC4180
+                : StringQuotedSignals.CsvNewRowWindows,
 
             _ => throw new NotImplementedException(NewRow.ToString())
         };
@@ -80,7 +88,8 @@ public class B_SplitQuotedRows
         string csv = GetCsv();
 
         var configuration = new CsvConfiguration(CultureInfo.InvariantCulture);
-        configuration.PrepareHeaderForMatch = args => args.Header.WhereIsInAnyCategory(CharCategories.Letter).ToUpperInvariant();
+        configuration.PrepareHeaderForMatch =
+            args => args.Header.WhereIsInAnyCategory(CharCategories.Letter).ToUpperInvariant();
 
         if (!IsNewRowTolerant)
         {

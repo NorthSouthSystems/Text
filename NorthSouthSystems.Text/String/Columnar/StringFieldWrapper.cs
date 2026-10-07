@@ -133,10 +133,14 @@ public readonly struct StringFieldWrapper : IEquatable<StringFieldWrapper>
         Optional(field, XmlConvert.ToDecimal);
 
     public static explicit operator DateTime(StringFieldWrapper field) =>
-        Required(field, static value => DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind));
+        Required(
+            field,
+            static value => DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind));
 
     public static explicit operator DateTime?(StringFieldWrapper field) =>
-        Optional(field, static value => DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind));
+        Optional(
+            field,
+            static value => DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind));
 
     public static explicit operator DateTimeOffset(StringFieldWrapper field) =>
         Required(field, XmlConvert.ToDateTimeOffset);

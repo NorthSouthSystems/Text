@@ -42,6 +42,10 @@ public static partial class StringSchemaExtensions
         ArgumentNullException.ThrowIfNull(entry);
 
         return entry.Header
-            + StringFixedExtensions.JoinFixedRowNoVerifyColumnWidths(fields, entry.Widths, entry.FillCharacter, leftToFit);
+            + StringFixedExtensions.JoinFixedRowNoVerifyColumnWidths(
+                fields,
+                entry.Widths,
+                entry.FillCharacter,
+                leftToFit);
     }
 }

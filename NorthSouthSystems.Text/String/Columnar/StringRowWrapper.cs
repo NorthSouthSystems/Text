@@ -67,7 +67,9 @@ public readonly struct StringRowWrapper : IEquatable<StringRowWrapper>
                 throw new ArgumentOutOfRangeException(nameof(index), "index must be >= 0.");
 
             if (index >= _factory.ColumnNames.Length)
-                throw new ArgumentOutOfRangeException(nameof(index), "index must be < the number of columns in the StringRowWrapperFactory.");
+                throw new ArgumentOutOfRangeException(
+                    nameof(index),
+                    "index must be < the number of columns in the StringRowWrapperFactory.");
 
             return CreateField(index);
         }
@@ -78,15 +80,21 @@ public readonly struct StringRowWrapper : IEquatable<StringRowWrapper>
         get
         {
             if (!_factory.TryGetIndex(columnName, out int index))
-                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Column not found: {0}.", columnName), nameof(columnName));
+                throw new ArgumentException(
+                    string.Format(CultureInfo.InvariantCulture, "Column not found: {0}.", columnName),
+                    nameof(columnName));
 
             return CreateField(index);
         }
     }
 
-    public IEnumerable<StringFieldWrapper> Fields => Enumerable.Range(0, _factory.ColumnNames.Length).Select(CreateField);
+    public IEnumerable<StringFieldWrapper> Fields =>
+        Enumerable.Range(0, _factory.ColumnNames.Length).Select(CreateField);
 
-    private StringFieldWrapper CreateField(int index) => new(_factory.ColumnNames[index], index < _fields.Length ? _fields[index] : null);
+    private StringFieldWrapper CreateField(int index) =>
+        new(
+            _factory.ColumnNames[index],
+            index < _fields.Length ? _fields[index] : null);
 
     #endregion
 }
