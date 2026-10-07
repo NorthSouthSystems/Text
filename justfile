@@ -1,4 +1,4 @@
 import 'dotnet.justfile'
 
-format:
+format: \
     (format-solution "NorthSouthSystems.Text.slnx")
