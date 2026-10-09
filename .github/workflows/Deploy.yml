@@ -27,7 +27,7 @@ jobs:
 
             -   name: Deploy
                 env:
-                    NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+                    NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }} # `dotnet nuget push` requires NUGET_API_KEY naming.
                 run: just deploy
 
             -   name: Tag
