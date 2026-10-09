@@ -19,15 +19,34 @@ format-solution solution: tools
         --no-updates \
         --verbosity=ERROR
 
-build: restore
-    dotnet build --no-restore
+build configuration="Debug": restore
+    dotnet build \
+        --no-restore \
+        --configuration {{configuration}}
 
-test: build
-    dotnet test --no-build
-
-coverage: tools build && coverage-summary
+test configuration="Debug": (build configuration)
     dotnet test \
         --no-build \
+        --configuration {{configuration}}
+
+[windows]
+clean-coverage:
+    foreach ($path in @('artifacts/coverage', 'artifacts/coverage-report')) { \
+        if (Test-Path -LiteralPath $path) { \
+            Remove-Item -LiteralPath $path -Recurse -Force -ErrorAction Stop \
+        } \
+    }
+
+[unix]
+clean-coverage:
+    rm -rf -- \
+        artifacts/coverage \
+        artifacts/coverage-report
+
+coverage configuration="Debug": clean-coverage tools (build configuration)
+    dotnet test \
+        --no-build \
+        --configuration {{configuration}} \
         --coverage \
         --coverage-output-format cobertura \
         --results-directory artifacts/coverage
@@ -37,9 +56,30 @@ coverage: tools build && coverage-summary
         "-reporttypes:TextSummary"
 
 [windows]
-coverage-summary:
+coverage-summary configuration="Debug": (coverage configuration)
     Get-Content artifacts/coverage-report/Summary.txt
 
 [unix]
-coverage-summary:
+coverage-summary configuration="Debug": (coverage configuration)
     cat artifacts/coverage-report/Summary.txt
+
+[windows]
+clean-pack:
+    if (Test-Path -LiteralPath 'artifacts/packages') { \
+        Remove-Item -LiteralPath 'artifacts/packages' -Recurse -Force -ErrorAction Stop \
+    }
+
+[unix]
+clean-pack:
+    rm -rf -- artifacts/packages
+
+pack: clean-pack (test "Release")
+    dotnet pack \
+        --no-build \
+        --configuration Release \
+        --output artifacts/packages
+
+publish source: pack
+    dotnet nuget push \
+        "artifacts/packages/*.nupkg" \
+        --source "{{source}}"

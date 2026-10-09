@@ -2,8 +2,6 @@
     <Folder Name="/_/">
         <File Path=".editorconfig" />
         <File Path=".gitattributes" />
-        <File Path=".github/workflows/BuildTestAnalyze.yml" />
-        <File Path=".github/workflows/BuildTestPackagePublish.yml" />
         <File Path=".gitignore" />
         <File Path="Directory.Build.props" />
         <File Path="Directory.Packages.props" />
@@ -16,6 +14,10 @@
         <File Path="nuget.config" />
         <File Path="README.md" />
         <File Path="version.json" />
+    </Folder>
+    <Folder Name="/_/GitHubActions/">
+        <File Path=".github/workflows/Deploy.yml" />
+        <File Path=".github/workflows/Integrate.yml" />
     </Folder>
     <Project Path="NorthSouthSystems.Text.Benchmarks/NorthSouthSystems.Text.Benchmarks.csproj" />
     <Project Path="NorthSouthSystems.Text.Tests/NorthSouthSystems.Text.Tests.csproj" />
