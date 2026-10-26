@@ -1,6 +1,18 @@
 name: Integrate
 
-on: [ push, workflow_dispatch ]
+on:
+    push:
+    schedule:
+        -   cron: '30 3 * * *'
+            timezone: America/New_York
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+concurrency:
+    group: integrate-${{ github.ref }}
+    cancel-in-progress: false
 
 jobs:
     integrate:
@@ -13,9 +25,48 @@ jobs:
 
             -   uses: actions/setup-dotnet@v6
                 with:
-                    dotnet-version: '10.0.x'
-                    dotnet-quality: 'ga'
+                    global-json-file: global.json
 
             -   uses: extractions/setup-just@v4
 
-            -   run: just coverage-summary Release
+            -   name: Tools
+                run: just tools
+
+            -   name: Certs
+                shell: bash
+                run: |
+                    sudo apt-get update
+                    sudo apt-get install -y libnss3-tools
+
+                    export SSL_CERT_DIR="$HOME/.aspnet/dev-certs/trust:/usr/lib/ssl/certs"
+                    echo "SSL_CERT_DIR=$SSL_CERT_DIR" >> "$GITHUB_ENV"
+
+                    dotnet dev-certs https --trust
+                    dotnet dev-certs https --check --trust
+
+            -   name: Update Package Versions
+                id: update
+                if: github.event_name != 'push'
+                run: |
+                    just update-package-versions
+                    if ! git diff --quiet -- Directory.Packages.props; then
+                        echo "changed=true" >> "$GITHUB_OUTPUT"
+                    fi
+
+            -   name: Integrate
+                if: github.event_name != 'schedule' || steps.update.outputs.changed == 'true'
+                timeout-minutes: ${{ fromJSON(vars.INTEGRATE_TIMEOUT_MINUTES || '15') }}
+                run: just integrate
+
+            -   name: Commit Package Versions
+                if: github.event_name != 'push' && steps.update.outputs.changed == 'true'
+                run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                    git add -u
+                    git commit -m "Updated NuGet package versions."
+                    git push
+
+            -   name: Coverage Summary
+                if: github.event_name != 'schedule' || steps.update.outputs.changed == 'true'
+                run: cat artifacts/coverage-report/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"

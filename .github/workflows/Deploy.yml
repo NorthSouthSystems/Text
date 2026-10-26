@@ -2,16 +2,16 @@ name: Deploy
 
 on: workflow_dispatch
 
+permissions:
+    contents: write
+
+concurrency:
+    group: deploy
+    cancel-in-progress: false
+
 jobs:
     deploy:
         runs-on: ubuntu-latest
-
-        permissions:
-            contents: write
-
-        concurrency:
-            group: deploy
-            cancel-in-progress: false
 
         steps:
             -   uses: actions/checkout@v7
@@ -20,17 +20,35 @@ jobs:
 
             -   uses: actions/setup-dotnet@v6
                 with:
-                    dotnet-version: '10.0.x'
-                    dotnet-quality: 'ga'
+                    global-json-file: global.json
 
             -   uses: extractions/setup-just@v4
+
+            -   name: Tools
+                run: just tools
+
+            -   name: Certs
+                shell: bash
+                run: |
+                    sudo apt-get update
+                    sudo apt-get install -y libnss3-tools
+
+                    export SSL_CERT_DIR="$HOME/.aspnet/dev-certs/trust:/usr/lib/ssl/certs"
+                    echo "SSL_CERT_DIR=$SSL_CERT_DIR" >> "$GITHUB_ENV"
+
+                    dotnet dev-certs https --trust
+                    dotnet dev-certs https --check --trust
 
             -   name: Deploy
                 env:
                     NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }} # `dotnet nuget push` requires NUGET_API_KEY naming.
+                timeout-minutes: ${{ fromJSON(vars.DEPLOY_TIMEOUT_MINUTES || '15') }}
                 run: just deploy
 
             -   name: Tag
                 run: |
                     version="$(dotnet nbgv get-version --variable NuGetPackageVersion)"
                     git push origin "HEAD:refs/tags/v${version}"
+
+            -   name: Coverage Summary
+                run: cat artifacts/coverage-report/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"

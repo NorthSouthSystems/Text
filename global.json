@@ -1,7 +1,10 @@
 {
     "sdk": {
-        "version": "10.0.100",
+        "version": "10.0.402",
         "rollForward": "latestFeature"
+    },
+    "msbuild-sdks": {
+        "NorthSouthSystems.NET.Sdk": "14.0.1"
     },
     "test": {
         "runner": "Microsoft.Testing.Platform"

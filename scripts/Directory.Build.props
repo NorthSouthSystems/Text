@@ -1,0 +1,63 @@
+<!-- The presence of this file blocks inheritance of the solution's Directory.Build.props intended only for csproj. -->
+<Project>
+
+    <!-- Normally found in NorthSouthSystems.NET.Sdk -->
+
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+        <!-- Normally we disable in order to explicitly list all global usings later in this file; however, for -->
+        <!-- file-based applications, Rider assumes that they are enabled and does not process the global usings -->
+        <!-- listed in this file at all. When in Rome... -->
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+        <Authors>North South Systems, LLC</Authors>
+        <Copyright>Copyright (c) 2023-$([System.DateTime]::UtcNow.ToString('yyyy')) North South Systems, LLC</Copyright>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(GITHUB_ACTIONS)' == 'true' ">
+        <!-- Deterministic Builds -->
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <!-- Used for skipping long running tests or reducing fuzz durations during CI builds. -->
+        <DefineConstants>$(DefineConstants);GITHUB_ACTIONS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <IsBenchmarkProject>false</IsBenchmarkProject>
+        <IsTestingPlatformApplication>false</IsTestingPlatformApplication>
+        <IsTestProject>false</IsTestProject>
+        <SonarQubeExclude>true</SonarQubeExclude>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <AnalysisMode>All</AnalysisMode>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <!-- Normally found in /Directory.Build.props -->
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- See comment above ImplicitUsings Property. -->
+        <!-- <Using Include="System"/> -->
+        <!-- ... -->
+    </ItemGroup>
+
+    <!-- Custom -->
+
+    <PropertyGroup>
+        <!-- CA2007 (Consider calling ConfigureAwait ...) These scripts have no SynchronizationContext. -->
+        <NoWarn>$(NoWarn),CA2007</NoWarn>
+    </PropertyGroup>
+
+</Project>
