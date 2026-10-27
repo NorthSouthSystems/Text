@@ -2,6 +2,8 @@
     <PropertyGroup>
         <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+        <DotNetVersion>10.0.14</DotNetVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,5 +23,9 @@
         <!-- In some cases, transitive pinning is necessary due to an unexplicable error, likely related to -->
         <!-- explicit nuget.config package mapping (which we have since relaxed with a catch-all pattern): -->
         <!-- NU1102 "Unable to find package ... with version (>= [a valid version])" -->
+
+        <!-- NuGet.Protocol -->
+        <!-- 8.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-846f-f764-76mx -->
+        <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="$(DotNetVersion)" />
     </ItemGroup>
 </Project>
