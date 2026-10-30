@@ -1,8 +1,26 @@
 [windows]
 set shell := ["pwsh.exe", "-NoLogo", "-NoProfile", "-Command"]
 
+[windows]
+set script-interpreter := ["pwsh.exe", "-NoLogo", "-NoProfile", "-File"]
+
 [unix]
 set shell := ["bash", "-O", "inherit_errexit", "-euo", "pipefail", "-c"]
+
+[unix]
+set script-interpreter := ["bash", "-euo", "pipefail"]
+
+# This is used for local development only.
+[windows, script]
+update-dotnet-sdk:
+    $major = (dotnet --list-sdks | Select-Object -Last 1).Split('.')[0]
+    winget install --exact --id "Microsoft.DotNet.SDK.$major" --source winget
+
+# This is used for local development only.
+[unix, script]
+update-dotnet-sdk:
+    major=$(dotnet --list-sdks | tail -n 1 | cut -d. -f1)
+    curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -s -- --channel "$major.0" --quality GA
 
 # This is intended to be "explicitly" invoked; we are not calling it from other recipes.
 tools:
@@ -13,14 +31,15 @@ certs:
     dotnet dev-certs https --trust
     dotnet dev-certs https --check --trust
 
+# This is intended to be "explicitly" invoked; we are not calling it from other recipes.
+update-package-versions:
+    dotnet run --file scripts/UpdatePackageVersions.cs
+
 restore:
     dotnet restore --locked-mode
 
 restore-force:
     dotnet restore --force-evaluate
-
-update-package-versions: && restore-force
-    dotnet run --file scripts/UpdatePackageVersions.cs
 
 format-solution solution:
     dotnet jb cleanupcode "{{solution}}" \

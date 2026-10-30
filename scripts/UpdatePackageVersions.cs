@@ -3,6 +3,8 @@
 
 using System.Collections.Immutable;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
@@ -15,15 +17,16 @@ using NuGet.Versioning;
 
 string solutionDirectory = Helpers.CrawlToRepositoryRoot();
 string propsFilepath = Path.Combine(solutionDirectory, "Directory.Packages.props");
+string toolsFilepath = Path.Combine(solutionDirectory, "dotnet-tools.json");
 
 Console.WriteLine($"Loading {propsFilepath} ...");
 
 var propsDoc = XDocument.Load(propsFilepath, LoadOptions.PreserveWhitespace);
 
-var versionVariables = propsDoc
+var propsVersionVariables = propsDoc
     .Descendants("PropertyGroup")
     .SelectMany(g => g.Elements())
-    .Select(e => new VersionVariable(e))
+    .Select(e => new PropsVersionVariable(e))
     .ToImmutableArray();
 
 var propsPackageVersions = propsDoc
@@ -31,27 +34,58 @@ var propsPackageVersions = propsDoc
     .Select(e => new PropsPackageVersion(e))
     .ToImmutableArray();
 
-Console.WriteLine($"Checking {propsPackageVersions.Length} packages against nuget.org ...");
+Console.WriteLine($"Loading {toolsFilepath} ...");
 
-var repoPackageVersionsById = new Dictionary<string, RepositoryPackageVersion>(StringComparer.OrdinalIgnoreCase);
+var toolsDoc = JsonNode.Parse(await File.ReadAllTextAsync(toolsFilepath))
+               ?? throw new InvalidDataException("Invalid dotnet-tools.json.");
+
+var toolsPackageVersions = (toolsDoc["tools"]?.AsObject()
+        ?? throw new InvalidDataException("Missing 'tools' object."))
+    .Select(t => new ToolsPackageVersion(t))
+    .ToImmutableArray();
+
+var packageIds = propsPackageVersions
+    .Select(ppv => ppv.Id)
+    .Concat(toolsPackageVersions.Select(t => t.Id))
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToImmutableArray();
+
+Console.WriteLine($"Checking {packageIds.Length} packages against nuget.org ...");
+
+var repoPackageMetadataById = new Dictionary<string, RepositoryPackageMetadata>(StringComparer.OrdinalIgnoreCase);
 
 var now = DateTimeOffset.UtcNow;
 const int cooldownDays = 7;
 var cooldownCutoff = now.AddDays(-cooldownDays);
-ImmutableArray<string> cooldownExemptPrefixes = ["Aspire.", "Azure.", "Microsoft.", "NorthSouthSystems."];
+ImmutableArray<string> cooldownExemptPrefixes = ["Aspire.", "Azure.", "Microsoft.", "NorthSouthSystems.", "System."];
 
 var repo = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
-var resource = await repo.GetResourceAsync<PackageMetadataResource>();
+var metadata = await repo.GetResourceAsync<PackageMetadataResource>();
+var search = await repo.GetResourceAsync<PackageSearchResource>();
 
 using SourceCacheContext cache = new();
 
-foreach (var propsPackageVersion in propsPackageVersions)
+foreach (string packageId in packageIds)
 {
-    bool isCooldownExempt = cooldownExemptPrefixes.Any(cep =>
-        propsPackageVersion.Id.StartsWith(cep, StringComparison.OrdinalIgnoreCase));
+    bool isCooldownExempt = false;
     
-    var versions = (await resource!.GetMetadataAsync(
-            propsPackageVersion.Id,
+    if (cooldownExemptPrefixes.Any(cep => packageId.StartsWith(cep, StringComparison.OrdinalIgnoreCase)))
+    {
+        var searches = await search!.SearchAsync(
+            $"packageid:{packageId}",
+            new(includePrerelease: true),
+            0,
+            1,
+            NullLogger.Instance,
+            default);
+
+        isCooldownExempt = searches.Any(p => 
+            string.Equals(p.Identity.Id, packageId, StringComparison.OrdinalIgnoreCase)
+            && p.PrefixReserved);
+    }
+    
+    var metadatas = (await metadata!.GetMetadataAsync(
+            packageId,
             includePrerelease: true,
             includeUnlisted: false,
             cache,
@@ -62,32 +96,32 @@ foreach (var propsPackageVersion in propsPackageVersions)
         .OrderByDescending(v => v)
         .ToImmutableArray();
 
-    if (versions.Length == 0)
-        await Console.Error.WriteLineAsync($"No listed versions found for {propsPackageVersion.Id}.");
+    if (metadatas.Length == 0)
+        await Console.Error.WriteLineAsync($"No listed metadata (after cooldown) found for {packageId}.");
 
-    var repoPackageVersion = new RepositoryPackageVersion(
-        propsPackageVersion.Id,
-        versions.FirstOrDefault(v => !v.IsPrerelease),
-        versions.FirstOrDefault(v => v.IsPrerelease));
+    var repoPackageMetadata = new RepositoryPackageMetadata(
+        packageId,
+        metadatas.FirstOrDefault(v => !v.IsPrerelease),
+        metadatas.FirstOrDefault(v => v.IsPrerelease));
 
-    repoPackageVersionsById.Add(propsPackageVersion.Id, repoPackageVersion);
+    repoPackageMetadataById.Add(packageId, repoPackageMetadata);
 }
 
-int changes = 0;
+int propsChanges = 0;
 
-foreach (var versionVariable in versionVariables)
+foreach (var versionVariable in propsVersionVariables)
 {
-    var packageIds = propsPackageVersions
+    var referencingPackageIds = propsPackageVersions
         .Where(ppv => string.Equals(ppv.VersionRaw, versionVariable.Reference, StringComparison.Ordinal))
         .Select(ppv => ppv.Id)
         .ToImmutableArray();
 
-    if (packageIds.Length == 0)
+    if (referencingPackageIds.Length == 0)
         continue;
 
     // A newer release of ANY referencing package wins.
-    var nextVersion = packageIds
-        .Select(id => SelectVersion(versionVariable.Version, repoPackageVersionsById[id]))
+    var nextVersion = referencingPackageIds
+        .Select(id => SelectVersion(versionVariable.Version, repoPackageMetadataById[id]))
         .OrderByDescending(v => v)
         .First();
 
@@ -100,60 +134,94 @@ foreach (var versionVariable in versionVariables)
     if (versionVariable.Name == "AspireVersion")
         UpdateGlobalJsonAspire(nextVersion.ToNormalizedString());
 
-    changes++;
+    propsChanges++;
 }
 
-foreach (var propsPackageVersion in propsPackageVersions.Where(ppv => ppv.CanParse && !ppv.ReferencesVariable))
+foreach (var packageVersion in propsPackageVersions.Where(ppv => ppv.CanParse && !ppv.ReferencesVariable))
 {
-    var nextVersion = SelectVersion(propsPackageVersion.Version, repoPackageVersionsById[propsPackageVersion.Id]);
+    var nextVersion = SelectVersion(packageVersion.Version, repoPackageMetadataById[packageVersion.Id]);
 
-    if (propsPackageVersion.Version.CompareTo(nextVersion) >= 0)
+    if (packageVersion.Version.CompareTo(nextVersion) >= 0)
         continue;
 
-    Console.WriteLine($"\t{propsPackageVersion.Id}: {propsPackageVersion.VersionRaw} -> {nextVersion.ToNormalizedString()}");
-    propsPackageVersion.VersionRaw = nextVersion.ToNormalizedString();
+    Console.WriteLine($"\t{packageVersion.Id}: {packageVersion.VersionRaw} -> {nextVersion.ToNormalizedString()}");
+    packageVersion.VersionRaw = nextVersion.ToNormalizedString();
 
-    changes++;
+    propsChanges++;
 }
 
-if (changes == 0)
+int toolsChanges = 0;
+
+foreach (var packageVersion in toolsPackageVersions)
+{
+    var nextVersion = SelectVersion(packageVersion.Version, repoPackageMetadataById[packageVersion.Id]);
+
+    if (packageVersion.Version.CompareTo(nextVersion) >= 0)
+        continue;
+
+    Console.WriteLine($"\t{packageVersion.Id}: {packageVersion.VersionRaw} -> {nextVersion.ToNormalizedString()}");
+    packageVersion.VersionRaw = nextVersion.ToNormalizedString();
+
+    toolsChanges++;
+}
+
+if (propsChanges == 0 && toolsChanges == 0)
 {
     Console.WriteLine("Already up to date.");
     return;
 }
 
-Console.WriteLine($"{changes} elements to update ...");
-
-var xmlSettings = new XmlWriterSettings()
+if (propsChanges > 0)
 {
-    Async = true,
-    Encoding = new UTF8Encoding(false),
-    Indent = false,
-    OmitXmlDeclaration = propsDoc.Declaration is null,
-    NewLineHandling = NewLineHandling.None
-};
+    Console.WriteLine($"{propsChanges} Directory.Package.props elements to update ...");
 
-await using (var writer = XmlWriter.Create(propsFilepath, xmlSettings))
-    await propsDoc.SaveAsync(writer, CancellationToken.None);
+    var xmlSettings = new XmlWriterSettings()
+    {
+        Async = true,
+        Encoding = new UTF8Encoding(false),
+        Indent = false,
+        OmitXmlDeclaration = propsDoc.Declaration is null,
+        NewLineHandling = NewLineHandling.None
+    };
 
-Console.WriteLine($"Updated {propsFilepath}!");
+    await using (var writer = XmlWriter.Create(propsFilepath, xmlSettings))
+        await propsDoc.SaveAsync(writer, CancellationToken.None);
+
+    Console.WriteLine($"Updated {propsFilepath}!");
+}
+
+if (toolsChanges > 0)
+{
+    Console.WriteLine($"{toolsChanges} dotnet-tools.json nodes to update ...");
+
+    var jsonOptions = new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        IndentSize = 4
+    };
+    
+    await File.WriteAllTextAsync(toolsFilepath, toolsDoc.ToJsonString(jsonOptions));
+
+    Console.WriteLine($"Updated {toolsFilepath}!");
+}
+
 return;
 
 #pragma warning restore
 
-static NuGetVersion SelectVersion(NuGetVersion current, RepositoryPackageVersion repositoryPackageVersion)
+static NuGetVersion SelectVersion(NuGetVersion current, RepositoryPackageMetadata repositoryPackageMetadata)
 {
     // Existing stable stays stable.
     // Existing prereleases may graduate to a newer stable release or otherwise advance to a newer prerelease.
 
-    if (repositoryPackageVersion.Stable is not null
-        && repositoryPackageVersion.Stable.CompareTo(current) >= 0)
-        return repositoryPackageVersion.Stable;
+    if (repositoryPackageMetadata.Stable is not null
+        && repositoryPackageMetadata.Stable.CompareTo(current) >= 0)
+        return repositoryPackageMetadata.Stable;
 
     if (current.IsPrerelease
-        && repositoryPackageVersion.Prerelease is not null
-        && repositoryPackageVersion.Prerelease.CompareTo(current) >= 0)
-        return repositoryPackageVersion.Prerelease;
+        && repositoryPackageMetadata.Prerelease is not null
+        && repositoryPackageMetadata.Prerelease.CompareTo(current) >= 0)
+        return repositoryPackageMetadata.Prerelease;
 
     return current;
 }
@@ -173,7 +241,7 @@ void UpdateGlobalJsonAspire(string version)
     File.WriteAllText(filepath, json);
 }
 
-internal sealed record VersionVariable(XElement Element)
+internal sealed record PropsVersionVariable(XElement Element)
 {
     internal string Name => Element.Name.LocalName;
     internal string Reference => "$(" + Name + ")";
@@ -194,7 +262,7 @@ internal sealed record PropsPackageVersion(XElement Element)
 
     internal string VersionRaw
     {
-        get => (string?)Element.Attribute("Version") ?? throw new InvalidDataException("Missing Version attribute.");
+        get => (string?)Element.Attribute("Version") ?? throw new InvalidDataException("Missing 'Version' attribute.");
         set => Element.SetAttributeValue("Version", value);
     }
 
@@ -205,7 +273,20 @@ internal sealed record PropsPackageVersion(XElement Element)
     internal bool ReferencesVariable => VersionRaw.Contains('$', StringComparison.OrdinalIgnoreCase);
 }
 
-internal sealed record RepositoryPackageVersion(string Id, NuGetVersion? Stable, NuGetVersion? Prerelease);
+internal sealed record ToolsPackageVersion(KeyValuePair<string, JsonNode?> KeyAndNode)
+{
+    internal string Id => KeyAndNode.Key;
+
+    internal string VersionRaw
+    {
+        get => (string?)KeyAndNode.Value?["version"] ?? throw new InvalidDataException($"Missing 'version' for {Id}.");
+        set => KeyAndNode.Value!["version"] = value;
+    }
+
+    internal NuGetVersion Version => NuGetVersion.Parse(VersionRaw);
+}
+
+internal sealed record RepositoryPackageMetadata(string Id, NuGetVersion? Stable, NuGetVersion? Prerelease);
 
 // See comment in Helpers.cs.
 internal static class Helpers

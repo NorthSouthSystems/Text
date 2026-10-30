@@ -51,6 +51,11 @@ jobs:
                     just update-package-versions
                     if ! git diff --quiet -- Directory.Packages.props; then
                         echo "changed=true" >> "$GITHUB_OUTPUT"
+                        just restore-force
+                    fi
+                    if ! git diff --quiet -- dotnet-tools.json; then
+                        echo "changed=true" >> "$GITHUB_OUTPUT"
+                        just tools
                     fi
 
             -   name: Integrate
