@@ -7,15 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
-        <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
-        <PackageVersion Include="CsvHelper" Version="33.1.0" />
-        <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
-        <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.12.1" />
-        <PackageVersion Include="morelinq" Version="4.4.0" />
-        <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.94" />
-        <PackageVersion Include="NuGet.Protocol" Version="7.9.0" />
-        <PackageVersion Include="xunit.v3" Version="4.0.2" />
+        <PackageVersion Include="AwesomeAssertions" Version="9.6.0"/>
+        <PackageVersion Include="BenchmarkDotNet" Version="0.15.8"/>
+        <!-- TODO : Migrate Benchmarks using this CsvHelper 33 to 34 migration guide (major rewrite). -->
+        <!-- https://github.com/JoshClose/CsvHelper/blob/master/docs/releases/v34.0.0/migration.md -->
+        <PackageVersion Include="CsvHelper" Version="[33.1.0,34.0.0)"/>
+        <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0"/>
+        <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.12.1"/>
+        <PackageVersion Include="morelinq" Version="4.4.0"/>
+        <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.94"/>
+        <PackageVersion Include="NuGet.Protocol" Version="7.9.0"/>
+        <PackageVersion Include="xunit.v3" Version="4.0.2"/>
 
         <!-- Transitive Pinning -->
         <!-- This will help prevent large(r) potentially breaking version bumps, and it will also -->
@@ -26,6 +28,6 @@
 
         <!-- NuGet.Protocol -->
         <!-- 8.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-846f-f764-76mx -->
-        <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="$(DotNetVersion)" />
+        <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="$(DotNetVersion)"/>
     </ItemGroup>
 </Project>
