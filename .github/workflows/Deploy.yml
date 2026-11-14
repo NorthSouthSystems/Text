@@ -4,6 +4,7 @@ on: workflow_dispatch
 
 permissions:
     contents: write
+    id-token: write
 
 concurrency:
     group: deploy
@@ -39,9 +40,15 @@ jobs:
                     dotnet dev-certs https --trust
                     dotnet dev-certs https --check --trust
 
+            -   name: NuGet Login
+                id: nuget-login
+                uses: NuGet/login@v1
+                with:
+                    user: ${{ secrets.NUGET_USERNAME }}
+
             -   name: Deploy
                 env:
-                    NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }} # `dotnet nuget push` requires NUGET_API_KEY naming.
+                    NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
                 timeout-minutes: ${{ fromJSON(vars.DEPLOY_TIMEOUT_MINUTES || '15') }}
                 run: just deploy
 

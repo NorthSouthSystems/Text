@@ -101,13 +101,11 @@ clean-pack:
 clean-pack:
     rm -rf -- artifacts/packages
 
-pack: clean-pack (test "Release")
+publish source: clean-pack (coverage-summary "Release")
     dotnet pack \
         --no-build \
         --configuration Release \
         --output artifacts/packages
-
-publish source: pack
     dotnet nuget push \
         "artifacts/packages/*.nupkg" \
         --source "{{source}}"

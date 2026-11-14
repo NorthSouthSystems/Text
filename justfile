@@ -1,4 +1,7 @@
+set allow-duplicate-recipes
+
 import 'dotnet.justfile'
+mod dotnet 'dotnet.justfile'
 
 format: (format-solution "NorthSouthSystems.Text.slnx")
 

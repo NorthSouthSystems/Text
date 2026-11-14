@@ -43,7 +43,8 @@
     <!-- Normally found in /Directory.Build.props -->
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
+        <Features>runtime-async=on</Features>
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
     </PropertyGroup>
 
